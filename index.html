@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Домашняя библиотека</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="page-header">
+  <h1>📚 Домашняя библиотека</h1>
+  <p>Коллекция книг, которые стоят у нас на полке</p>
+
+  <div class="controls">
+    <input
+      type="text"
+      id="search-input"
+      class="search-input"
+      placeholder="Поиск по названию или автору..."
+      autocomplete="off"
+    >
+
+    <div class="genre-menu">
+      <button type="button" id="genre-button" class="genre-button" aria-haspopup="true" aria-expanded="false" aria-controls="genre-panel">
+        <span id="genre-button-label">Жанры</span>
+        <span class="genre-caret" aria-hidden="true">▾</span>
+      </button>
+      <div id="genre-panel" class="genre-panel" hidden>
+        <button type="button" id="genre-reset" class="genre-reset">Сбросить выбор</button>
+        <div id="genre-list" class="genre-list"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<p id="no-results" class="no-results" hidden>Ничего не найдено</p>
+
+<main id="book-grid" class="book-grid">
+  <!-- Карточки книг добавляются скриптом из books-data.js -->
+</main>
+
+<footer class="page-footer">
+  <p>Список книг редактируется в файле <code>books-data.js</code></p>
+</footer>
+
+<script src="books-data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
