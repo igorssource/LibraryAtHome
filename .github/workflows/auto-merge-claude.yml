@@ -1,0 +1,63 @@
+name: Claude-Zweige nach main übernehmen
+
+# Cloud-Sitzungen von Claude Code (Telefon) schreiben auf Zweige claude/....
+# Dieser Workflow übernimmt einen solchen Zweig automatisch nach main, aber NUR wenn
+#   1. alle geänderten Dateien unter home-library/ liegen (Bücherliste, Seite) und
+#   2. die Prüfung der Daten (ohne Netzwerk) besteht.
+# Änderungen an Regeln, Skripten oder Workflows bleiben auf dem Zweig und brauchen deine Freigabe.
+on:
+  push:
+    branches: ["claude/**"]
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: auto-merge-claude
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Geänderte Dateien prüfen
+        id: scope
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          changed=$(git diff --name-only "origin/main...origin/${BRANCH}")
+          echo "Geänderte Dateien:"; echo "$changed"
+          if [ -z "$changed" ]; then
+            echo "ok=false" >> "$GITHUB_OUTPUT"; echo "Keine Änderungen."; exit 0
+          fi
+          if echo "$changed" | grep -qv '^home-library/'; then
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "Es gibt Änderungen außerhalb von home-library/: keine automatische Übernahme."
+            exit 0
+          fi
+          echo "ok=true" >> "$GITHUB_OUTPUT"
+
+      - name: Daten prüfen (ohne Netzwerk)
+        if: steps.scope.outputs.ok == 'true'
+        run: python3 .claude/skills/add-books/tools/check_site.py --no-network
+
+      - name: Nach main übernehmen und Veröffentlichung starten
+        if: steps.scope.outputs.ok == 'true'
+        env:
+          BRANCH: ${{ github.ref_name }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name "Home Library"
+          git config user.email "home-library@users.noreply.github.com"
+          git checkout -B main origin/main
+          git merge --no-edit "origin/${BRANCH}"
+          git push origin main
+          gh workflow run pages.yml --ref main

@@ -1,0 +1,16 @@
+# Arbeitsdateien und lokale Einstellungen
+.claude/skills/add-books/work/
+.claude/settings.local.json
+.claude/worktrees/
+
+# alte Kopie der Seite mit eigenem git-Repository (nicht mehr nötig)
+site/
+
+# alte Sicherung der Bücherliste
+home-library/books-data_ALT.js
+
+# Sonstiges
+hallo.txt
+__pycache__/
+*.pyc
+*.log

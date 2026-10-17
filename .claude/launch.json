@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "home-library",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ".claude/skills/add-books/scripts/serve.ps1", "-Root", "home-library", "-Port", "8792"],
+      "port": 8792
+    },
+    {
+      "name": "cover-review",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ".claude/skills/add-books/scripts/serve.ps1", "-Root", ".claude/skills/add-books/work", "-Port", "8793"],
+      "port": 8793
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ".claude/skills/add-books/scripts/serve.ps1", "-Root", "site", "-Port", "8794"],
+      "port": 8794
+    },
+    {
+      "name": "deploy",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ".claude/skills/add-books/scripts/serve.ps1", "-Root", ".claude/skills/add-books/work/deploy", "-Port", "8795", "-Cors"],
+      "port": 8795
+    }
+  ]
+}
