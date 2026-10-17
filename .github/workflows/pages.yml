@@ -1,7 +1,7 @@
 name: Seite veröffentlichen
 
 # Veröffentlicht den Ordner home-library/ auf GitHub Pages.
-# Einmalig nötig: Repository -> Settings -> Pages -> Source = "GitHub Actions".
+# Einmalig nötig (erledigt): Repository -> Settings -> Pages -> Source = "GitHub Actions".
 on:
   push:
     branches: [main]
