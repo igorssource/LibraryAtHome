@@ -1,7 +1,8 @@
 ﻿<#
   add-entries.ps1 - добавляет новые книги в home-library\books-data.js
 
-  Входной файл (UTF-8), по строке на книгу:   название|автор|жанр1;жанр2|описание
+  Входной файл (UTF-8), по строке на книгу:   название|автор|жанр1;жанр2|описание[|произведение1;произведение2;...]
+    - пятое поле только у сборников: произведения по оглавлению (станет contents: [...])
     - строка, начинающаяся с #, — заголовок секции (попадёт в файл комментарием)
     - жанры только из GENRES; неизвестный жанр отбрасывается и попадает в отчёт
     - пустые жанры допустимы:  название|автор||описание
@@ -60,9 +61,10 @@ foreach ($line in [IO.File]::ReadAllLines($InputFile, $u)) {
   if ([string]::IsNullOrWhiteSpace($line)) { continue }
   if ($line.StartsWith('#')) { $pendingComment = "  // ==== " + $line.Substring(1).Trim() + " ===="; continue }
   $f = $line.Split('|')
-  if ($f.Count -ne 4) { $warn += "неверный формат (нужно 4 поля через |): $line"; continue }
+  if ($f.Count -ne 4 -and $f.Count -ne 5) { $warn += "неверный формат (нужно 4 или 5 полей через |): $line"; continue }
   $title = $f[0].Trim(); $author = $f[1].Trim(); $genreStr = $f[2].Trim(); $desc = $f[3].Trim()
-  if ("$title$author$desc" -match '["\\]') { $warn += "кавычки или обратный слэш в полях, пропущено: $title"; continue }
+  $works = @(); if ($f.Count -eq 5) { $works = @($f[4].Split(';') | ForEach-Object { $_.Trim() } | Where-Object { $_ }) }
+  if ("$title$author$desc$($works -join '')" -match '["\\]') { $warn += "кавычки или обратный слэш в полях, пропущено: $title"; continue }
 
   $dup = $null
   foreach ($e in ($existing + $batch)) { if (SameBook $title $author $e.title $e.author) { $dup = $e; break } }
@@ -80,6 +82,12 @@ foreach ($line in [IO.File]::ReadAllLines($InputFile, $u)) {
   $color = $palette[($id) % $palette.Count]
   $gjs = ($gl | ForEach-Object { '"' + $_ + '"' }) -join ", "
   if ($pendingComment) { $blocks.Add($nl + $pendingComment); $pendingComment = $null }
+  $descLine = "    description: `"$desc`""
+  $contentsLines = @()
+  if ($works.Count) {
+    $descLine += ","
+    $contentsLines = @("    contents: [" + (($works | ForEach-Object { '"' + $_ + '"' }) -join ", ") + "]")
+  }
   $blocks.Add((@(
     "  {",
     "    id: $id,",
@@ -88,7 +96,8 @@ foreach ($line in [IO.File]::ReadAllLines($InputFile, $u)) {
     "    genre: [$gjs],",
     "    cover: `"`",",
     "    color: `"$color`",",
-    "    description: `"$desc`"",
+    $descLine
+  ) + $contentsLines + @(
     "  }"
   ) -join $nl))
   $added += "id $id «$title»"
