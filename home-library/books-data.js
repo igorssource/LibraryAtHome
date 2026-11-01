@@ -602,9 +602,10 @@ const BOOKS = [
     title: "Романы",
     author: "Михаил Веллер",
     genre: ["Современная проза"],
-    cover: "",
+    cover: "https://s1.livelib.ru/boocover/1002197075/200x305/1614/boocover.jpg",
     color: "#fdcb6e",
-    description: "Сборник романов Михаила Веллера в одном томе."
+    description: "Сборник из двух романов Михаила Веллера в одном томе.",
+    contents: ["Приключения майора Звягина", "Гонец из Пизы"]
   },
   {
     id: 69,
