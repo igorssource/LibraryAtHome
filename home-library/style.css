@@ -231,6 +231,28 @@ body {
   overflow-wrap: anywhere;
 }
 
+.book-found {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+/* метка «Сборник» в углу обложки (у книг с полем contents) */
+.collection-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 3px 9px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: rgba(20, 18, 15, 0.78);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
 /* краткое описание: оверлей поверх обложки */
 .book-description {
   position: absolute;
@@ -246,6 +268,20 @@ body {
   transform: translateY(12px);
   transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
+}
+
+.book-description p {
+  margin: 0;
+}
+
+.book-description .book-contents-title {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.book-contents {
+  margin: 4px 0 0;
+  padding-left: 18px;
 }
 
 /* мышь: описание по наведению */
@@ -334,6 +370,17 @@ body {
 
   .book-author {
     font-size: 0.78rem;
+  }
+
+  .book-found {
+    font-size: 0.72rem;
+  }
+
+  .collection-badge {
+    top: 14px;
+    left: 14px;
+    padding: 2px 7px;
+    font-size: 0.64rem;
   }
 
   .book-description {
