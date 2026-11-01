@@ -236,57 +236,57 @@ const BOOKS = [
   // ==== Добавлено с фото полки (детская литература) ====
   {
     id: 28,
-    title: "Гэгс Тагебух [уточнить номер] — Держи хвост пистолетом",
-    author: "Джефф Кинни",
+    title: "Gregs Tagebuch [уточнить том]",
+    author: "Jeff Kinney",
     genre: ["Детская литература", "Юмор"],
     cover: "",
     color: "#fdcb6e",
-    description: "Часть серии «Дневник слабака» на немецком языке."
+    description: "Немецкое издание из серии «Дневник слабака» Джеффа Кинни. Номер тома на корешке не разобран, подзаголовок по-русски был записан как «Держи хвост пистолетом» — стоит сверить с корешком."
   },
   {
     id: 29,
-    title: "Гэгс Тагебух №13 — Eiskalt erwischt",
-    author: "Джефф Кинни",
+    title: "Gregs Tagebuch 13: Eiskalt erwischt!",
+    author: "Jeff Kinney",
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833936592.01._SCLZZZZZZZ_.jpg",
     color: "#e17055",
-    description: "Часть серии «Дневник слабака» на немецком языке."
+    description: "Немецкое издание, том 13 серии «Дневник слабака» Джеффа Кинни."
   },
   {
     id: 30,
-    title: "Гэгс Тагебух №20 — Bock auf Party?",
-    author: "Джефф Кинни",
+    title: "Gregs Tagebuch 20: Bock auf Party?",
+    author: "Jeff Kinney",
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833910615.01._SCLZZZZZZZ_.jpg",
     color: "#fab1a0",
-    description: "Часть серии «Дневник слабака» на немецком языке."
+    description: "Немецкое издание, том 20 серии «Дневник слабака» Джеффа Кинни."
   },
   {
     id: 31,
-    title: "Гэгс Тагебух №17 — Voll aufgedreht!",
-    author: "Джефф Кинни",
+    title: "Gregs Tagebuch 17: Voll aufgedreht!",
+    author: "Jeff Kinney",
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833907509.01._SCLZZZZZZZ_.jpg",
     color: "#00b894",
-    description: "Часть серии «Дневник слабака» на немецком языке."
+    description: "Немецкое издание, том 17 серии «Дневник слабака» Джеффа Кинни."
   },
   {
     id: 32,
-    title: "Гэгс Тагебух №18 — Kein Plan von nix",
-    author: "Джефф Кинни",
+    title: "Gregs Tagebuch 18: Kein Plan von nix",
+    author: "Jeff Kinney",
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833907908.01._SCLZZZZZZZ_.jpg",
     color: "#636e72",
-    description: "Часть серии «Дневник слабака» на немецком языке."
+    description: "Немецкое издание, том 18 серии «Дневник слабака» Джеффа Кинни."
   },
   {
     id: 33,
-    title: "Гэгс Тагебух №16 — Volltreffer!",
-    author: "Джефф Кинни",
+    title: "Gregs Tagebuch 16: Volltreffer!",
+    author: "Jeff Kinney",
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833906804.01._SCLZZZZZZZ_.jpg",
     color: "#0984e3",
-    description: "Часть серии «Дневник слабака» на немецком языке."
+    description: "Немецкое издание, том 16 серии «Дневник слабака» Джеффа Кинни."
   },
   {
     id: 34,
