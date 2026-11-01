@@ -3,7 +3,8 @@
 
 Python-Version von scripts/add-entries.ps1 (für Cloud-Sitzungen unter Linux; nur Standardbibliothek).
 
-Eingabedatei (UTF-8), eine Zeile pro Buch:   Titel|Autor|Genre1;Genre2|Beschreibung
+Eingabedatei (UTF-8), eine Zeile pro Buch:   Titel|Autor|Genre1;Genre2|Beschreibung[|Werk1;Werk2;...]
+  - fünftes Feld nur bei Sammelbänden: Werke laut Inhaltsverzeichnis (wird zu contents: [...])
   - Zeile mit # am Anfang = Abschnittsüberschrift (kommt als Kommentar in die Datei)
   - Genres nur aus GENRES; unbekannte Genres werden verworfen und gemeldet
   - leere Genres sind erlaubt:  Titel|Autor||Beschreibung
@@ -103,11 +104,12 @@ def main():
             pending_comment = "  // ==== " + line[1:].strip() + " ===="
             continue
         fields = line.split("|")
-        if len(fields) != 4:
-            warn.append("falsches Format (4 Felder mit | nötig): " + line)
+        if len(fields) not in (4, 5):
+            warn.append("falsches Format (4 oder 5 Felder mit | nötig): " + line)
             continue
-        title, author, genre_str, desc = [x.strip() for x in fields]
-        if re.search(r'["\\]', title + author + desc):
+        title, author, genre_str, desc = [x.strip() for x in fields[:4]]
+        works = [w.strip() for w in fields[4].split(";") if w.strip()] if len(fields) == 5 else []
+        if re.search(r'["\\]', title + author + desc + "".join(works)):
             warn.append("Anführungszeichen oder Backslash in den Feldern, übersprungen: " + title)
             continue
 
@@ -139,7 +141,8 @@ def main():
             "    genre: [%s]," % gjs,
             '    cover: "",',
             '    color: "%s",' % color,
-            '    description: "%s"' % desc,
+            '    description: "%s"' % desc + ("," if works else ""),
+        ] + (["    contents: [%s]" % ", ".join('"%s"' % w for w in works)] if works else []) + [
             "  }",
         ])
         parts.append(block + ",")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """check_site.py - prüft home-library/books-data.js und die Cover-Links ohne Browser.
 
-Prüft: doppelte ids/Titel, Genres außerhalb von GENRES, leere Genres, und ob jeder Cover-Link ein Bild liefert
+Prüft: doppelte ids/Titel, Genres außerhalb von GENRES, leere Genres, Feld contents (Sammelbände), und ob jeder Cover-Link ein Bild liefert
 (mit Referer der Seite, um Hotlink-Schutz zu erkennen). Rückgabecode 1, wenn etwas auffällt.
 
 Beispiel:  python3 check_site.py
@@ -52,6 +52,13 @@ def main():
     titles = [b["title"].lower() for b in books]
     problems += ["doppelte id: %d" % i for i in sorted(set(x for x in ids if ids.count(x) > 1))]
     problems += ["doppelter Titel: " + t for t in sorted(set(x for x in titles if titles.count(x) > 1))]
+    # contents: nur bei Sammelbänden, Liste von mindestens zwei nicht leeren Werktiteln
+    starts = [m.start() for m in re.finditer(r'\bid:\s*\d+,', text)] + [len(text)]
+    for k, b in enumerate(books):
+        cm = re.search(r'\bcontents:\s*\[(.*?)\]', text[starts[k]:starts[k + 1]], re.S)
+        b["contents"] = re.findall(r'"([^"]*)"', cm.group(1)) if cm else []
+        if cm and (len(b["contents"]) < 2 or not all(w.strip() for w in b["contents"])):
+            problems.append("id %d: contents braucht mindestens zwei nicht leere Werke" % b["id"])
     for b in books:
         for g in b["genre"]:
             if g not in allowed:
@@ -68,8 +75,9 @@ def main():
             if b["cover"] and not res[b["cover"]][0]:
                 broken.append("id %d «%s»: %s (%s)" % (b["id"], b["title"], b["cover"], res[b["cover"]][1]))
 
-    print("Bücher: %d, mit Cover: %d, ohne Cover: %d, ohne Genre: %d"
-          % (len(books), len(books) - len(no_cover), len(no_cover), len(no_genre)))
+    print("Bücher: %d, mit Cover: %d, ohne Cover: %d, ohne Genre: %d, Sammelbände: %d"
+          % (len(books), len(books) - len(no_cover), len(no_cover), len(no_genre),
+             sum(1 for b in books if b["contents"])))
     for p in problems:
         print("PROBLEM: " + p)
     for p in broken:
