@@ -448,7 +448,7 @@ const BOOKS = [
     title: "Бегство вперёд",
     author: "Аркадий и Борис Стругацкие",
     genre: ["Фантастика"],
-    cover: "",
+    cover: "https://s1.livelib.ru/boocover/1000274761/200x305/5df7/boocover.jpg",
     color: "#0984e3",
     description: "Издание Аркадия и Бориса Стругацких в тёмно-бордовом переплёте."
   },
@@ -575,7 +575,7 @@ const BOOKS = [
     title: "mASIAfucker",
     author: "Илья Стогофф",
     genre: ["Современная проза"],
-    cover: "",
+    cover: "https://s1.livelib.ru/boocover/1008286477/200x305/f736/boocover.jpg",
     color: "#0984e3",
     description: "Роман Ильи Стогоффа о путешествии по Азии."
   },
@@ -1140,7 +1140,7 @@ const BOOKS = [
     title: "Marc Chagall",
     author: "Ingo F. Walther, Rainer Metzger",
     genre: ["Искусство и мода"],
-    cover: "",
+    cover: "https://m.media-amazon.com/images/P/3836527812.01._SCLZZZZZZZ_.jpg",
     color: "#2d3436",
     description: "Немецкое издание, TASCHEN."
   },
@@ -1313,7 +1313,7 @@ const BOOKS = [
     title: "Deutsch aktiv Neu: Arbeitsbuch 1C",
     author: "Langenscheidt",
     genre: ["Техническая, учебная и справочная литература"],
-    cover: "",
+    cover: "https://m.media-amazon.com/images/P/3468491417.01._SCLZZZZZZZ_.jpg",
     color: "#74b9ff",
     description: "Рабочая тетрадь по немецкому языку."
   },
@@ -1322,7 +1322,7 @@ const BOOKS = [
     title: "Grammatik mit Sinn und Verstand: Mittel- und Oberstufe",
     author: "Klett",
     genre: ["Техническая, учебная и справочная литература"],
-    cover: "",
+    cover: "https://m.media-amazon.com/images/P/3126753353.01._SCLZZZZZZZ_.jpg",
     color: "#fab1a0",
     description: "Грамматика немецкого языка, Klett (Edition Deutsch)."
   },
@@ -1585,7 +1585,7 @@ const BOOKS = [
     title: "Динозавры в летней школе",
     author: "Д. Хохвальд, Й. Иле, П. Фритц",
     genre: ["Детская литература"],
-    cover: "",
+    cover: "https://s1.livelib.ru/boocover/1008373327/200x305/f885/boocover.jpg",
     color: "#fd79a8",
     description: "Детская книга о динозаврах."
   },
@@ -1594,7 +1594,7 @@ const BOOKS = [
     title: "Динозавры в аквапарке",
     author: "Д. Хохвальд, Й. Иле, П. Фритц",
     genre: ["Детская литература"],
-    cover: "",
+    cover: "https://s1.livelib.ru/boocover/1007664373/200x305/cede/boocover.jpg",
     color: "#6c5ce7",
     description: "Детская книга о динозаврах."
   },
