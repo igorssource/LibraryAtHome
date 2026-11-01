@@ -21,6 +21,8 @@ function createBookCard(book) {
   card.dataset.titleTranslit = toTranslit(book.title);
   card.dataset.authorTranslit = toTranslit(book.author);
   card.dataset.genres = (book.genre || []).join("|");
+  // Произведения сборника: ищем по ним и показываем, что именно нашлось
+  card.dataset.contents = (book.contents || []).join("|");
 
   const cover = document.createElement("div");
   cover.className = "book-cover";
@@ -35,9 +37,32 @@ function createBookCard(book) {
     cover.textContent = "📖";
   }
 
+  const isCollection = (book.contents || []).length > 0;
+  if (isCollection) {
+    const badge = document.createElement("span");
+    badge.className = "collection-badge";
+    badge.textContent = "Сборник";
+    cover.appendChild(badge);
+  }
+
   const description = document.createElement("div");
   description.className = "book-description";
-  description.textContent = book.description || "Описание пока не добавлено.";
+  const descText = document.createElement("p");
+  descText.textContent = book.description || "Описание пока не добавлено.";
+  description.appendChild(descText);
+  if (isCollection) {
+    const contentsTitle = document.createElement("p");
+    contentsTitle.className = "book-contents-title";
+    contentsTitle.textContent = "Содержание:";
+    const list = document.createElement("ul");
+    list.className = "book-contents";
+    book.contents.forEach((work) => {
+      const item = document.createElement("li");
+      item.textContent = work;
+      list.appendChild(item);
+    });
+    description.append(contentsTitle, list);
+  }
   cover.appendChild(description);
 
   const info = document.createElement("div");
@@ -51,8 +76,14 @@ function createBookCard(book) {
   author.className = "book-author";
   author.textContent = book.author;
 
+  // «Найдено: …» — когда книга нашлась по произведению из сборника, а не по названию
+  const found = document.createElement("p");
+  found.className = "book-found";
+  found.hidden = true;
+
   info.appendChild(title);
   info.appendChild(author);
+  info.appendChild(found);
 
   card.appendChild(cover);
   card.appendChild(info);
@@ -84,11 +115,24 @@ function setupFilters() {
     let visibleCount = 0;
 
     cards.forEach((card) => {
-      const matchesText =
+      const matchesMain =
         card.dataset.title.includes(query) ||
         card.dataset.author.includes(query) ||
         card.dataset.titleTranslit.includes(translitQuery) ||
         card.dataset.authorTranslit.includes(translitQuery);
+
+      const works = card.dataset.contents ? card.dataset.contents.split("|") : [];
+      const foundWorks = query
+        ? works.filter(
+            (w) => w.toLowerCase().includes(query) || toTranslit(w).includes(translitQuery)
+          )
+        : [];
+      const matchesText = matchesMain || foundWorks.length > 0;
+
+      const found = card.querySelector(".book-found");
+      const showFound = !matchesMain && foundWorks.length > 0;
+      found.hidden = !showFound;
+      found.textContent = showFound ? `Найдено: ${foundWorks.join(", ")}` : "";
 
       // Выбранные жанры сочетаются через «ИЛИ»: достаточно любого из выбранных
       const bookGenres = card.dataset.genres.split("|");
