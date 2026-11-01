@@ -13,11 +13,16 @@ function toTranslit(str) {
     .join("");
 }
 
+// Для поиска: нижний регистр и «ё» как «е», чтобы «тетушка» находила «тётушку» и наоборот
+function normalize(str) {
+  return str.toLowerCase().replace(/ё/g, "е");
+}
+
 function createBookCard(book) {
   const card = document.createElement("article");
   card.className = "book-card";
-  card.dataset.title = book.title.toLowerCase();
-  card.dataset.author = book.author.toLowerCase();
+  card.dataset.title = normalize(book.title);
+  card.dataset.author = normalize(book.author);
   card.dataset.titleTranslit = toTranslit(book.title);
   card.dataset.authorTranslit = toTranslit(book.author);
   card.dataset.genres = (book.genre || []).join("|");
@@ -110,7 +115,7 @@ function setupFilters() {
   const selectedGenres = new Set();
 
   function applyFilters() {
-    const query = input.value.trim().toLowerCase();
+    const query = normalize(input.value.trim());
     const translitQuery = toTranslit(query);
     let visibleCount = 0;
 
@@ -124,7 +129,7 @@ function setupFilters() {
       const works = card.dataset.contents ? card.dataset.contents.split("|") : [];
       const foundWorks = query
         ? works.filter(
-            (w) => w.toLowerCase().includes(query) || toTranslit(w).includes(translitQuery)
+            (w) => normalize(w).includes(query) || toTranslit(w).includes(translitQuery)
           )
         : [];
       const matchesText = matchesMain || foundWorks.length > 0;
