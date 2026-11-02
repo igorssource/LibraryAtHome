@@ -2,8 +2,9 @@
 """check_site.py - prüft home-library/books-data.js und die Cover-Links ohne Browser.
 
 Prüft: doppelte ids/Titel, Genres außerhalb von GENRES, leere Genres, Feld contents (Sammelbände),
-Sprache (language aus der Liste LANGUAGES in script.js), Serien (volume ganze Zahl, nur mit series), und ob jeder Cover-Link ein Bild liefert
-(mit Referer der Seite, um Hotlink-Schutz zu erkennen). Rückgabecode 1, wenn etwas auffällt.
+Sprache (language aus der Liste LANGUAGES in script.js), Serien (volume ganze Zahl, nur mit series),
+lokale Cover (covers/<id>.jpg muss existieren und ein JPEG sein) und ob jeder Cover-Link ins Internet ein Bild
+liefert (mit Referer der Seite, um Hotlink-Schutz zu erkennen). Rückgabecode 1, wenn etwas auffällt.
 
 Beispiel:  python3 check_site.py
 """
@@ -86,16 +87,24 @@ def main():
     no_cover = [b for b in books if not b["cover"]]
 
     broken = []
+    site_dir = os.path.dirname(path)
+    for b in books:
+        if b["cover"] and not b["cover"].startswith("http"):
+            f = os.path.join(site_dir, b["cover"])
+            ok = os.path.isfile(f) and os.path.getsize(f) > 3000 and open(f, "rb").read(3) == b"\xff\xd8\xff"
+            if not ok:
+                broken.append("id %d «%s»: lokale Datei fehlt oder ist kein JPEG: %s" % (b["id"], b["title"], b["cover"]))
     if not args.no_network:
-        urls = [b["cover"] for b in books if b["cover"]]
+        urls = [b["cover"] for b in books if b["cover"].startswith("http")]
         with ThreadPoolExecutor(max_workers=8) as ex:
             res = {u: (ok, info) for u, ok, info in ex.map(fetch, urls)}
         for b in books:
-            if b["cover"] and not res[b["cover"]][0]:
+            if b["cover"].startswith("http") and not res[b["cover"]][0]:
                 broken.append("id %d «%s»: %s (%s)" % (b["id"], b["title"], b["cover"], res[b["cover"]][1]))
 
-    print("Bücher: %d, mit Cover: %d, ohne Cover: %d, ohne Genre: %d, Sammelbände: %d"
-          % (len(books), len(books) - len(no_cover), len(no_cover), len(no_genre),
+    local = sum(1 for b in books if b["cover"] and not b["cover"].startswith("http"))
+    print("Bücher: %d, mit Cover: %d (davon als Kopie in covers/: %d), ohne Cover: %d, ohne Genre: %d, Sammelbände: %d"
+          % (len(books), len(books) - len(no_cover), local, len(no_cover), len(no_genre),
              sum(1 for b in books if b["contents"])))
     for p in problems:
         print("PROBLEM: " + p)
