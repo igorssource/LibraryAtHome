@@ -9,6 +9,8 @@ Eingabedatei (UTF-8), eine Zeile pro Buch:   Titel|Autor|Genre1;Genre2|Beschreib
   - Genres nur aus GENRES; unbekannte Genres werden verworfen und gemeldet
   - leere Genres sind erlaubt:  Titel|Autor||Beschreibung
 Duplikate (gleicher Titel und gleicher Autor, Bandnummern werden beachtet) werden übersprungen.
+Sprache (language) wird automatisch gesetzt: nach dem Anfang der Beschreibung («Немецкое издание.» -> de usw.),
+sonst kyrillischer Titel -> ru. Was sich nicht bestimmen lässt, wird gemeldet (language: "").
 
 Beispiel:  python3 add_entries.py ../work/new-books.txt
 """
@@ -22,6 +24,19 @@ SKILL = os.path.dirname(HERE)                      # .claude/skills/add-books
 ROOT = os.path.abspath(os.path.join(SKILL, "..", "..", ".."))  # Projektwurzel
 PALETTE = ["#6c5ce7", "#0984e3", "#00b894", "#e17055", "#fdcb6e", "#d63031", "#2d3436",
            "#636e72", "#e84393", "#00cec9", "#a29bfe", "#74b9ff", "#fab1a0", "#fd79a8"]
+
+
+LANG_BY_DESC = [("Немецк", "de"), ("Английск", "en"), ("Итальянск", "it"), ("Французск", "fr"),
+                ("Испанск", "es"), ("Белорусск", "be"), ("Украинск", "uk"), ("Китайск", "zh"), ("Японск", "ja")]
+
+
+def guess_language(title, desc):
+    for prefix, code in LANG_BY_DESC:
+        if desc.startswith(prefix):
+            return code
+    if re.search(r"[а-яё]", title, re.I):
+        return "ru"
+    return ""
 
 
 def norm(s):
@@ -129,6 +144,9 @@ def main():
         cur_id += 1
         batch.append({"id": cur_id, "title": title, "author": author})
         color = PALETTE[cur_id % len(PALETTE)]
+        lang = guess_language(title, desc)
+        if not lang:
+            warn.append("Sprache bei «%s» nicht erkannt: language von Hand setzen" % title)
         gjs = ", ".join('"%s"' % g for g in genres)
         if pending_comment:
             parts.append(nl + pending_comment)
@@ -141,6 +159,7 @@ def main():
             "    genre: [%s]," % gjs,
             '    cover: "",',
             '    color: "%s",' % color,
+            '    language: "%s",' % lang,
             '    description: "%s"' % desc + ("," if works else ""),
         ] + (["    contents: [%s]" % ", ".join('"%s"' % w for w in works)] if works else []) + [
             "  }",

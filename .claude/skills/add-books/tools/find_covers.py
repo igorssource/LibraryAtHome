@@ -2,18 +2,18 @@
 """find_covers.py - automatische Suche nach Covern (und fehlenden Autoren) für Bücher in books-data.js.
 
 Python-Version von scripts/find-covers.ps1 (für Cloud-Sitzungen unter Linux; nur Standardbibliothek).
-ACHTUNG: aus dem PowerShell-Skript übertragen und lokal noch nicht ausgeführt; beim ersten Lauf in der
-Cloud auf Fehler achten und sie beheben.
 
 Reihenfolge der Quellen (Begründung: references/cover-sources.md):
   Kyrillisch (Titel oder Autor): Labirint -> LiveLib -> Open Library -> Apple Books
-  sonst:                         Open Library -> Apple Books -> DNB (ISBN) -> Amazon per ISBN -> Google Books per ISBN
+  sonst:                         Apple Books -> DNB (ISBN) -> Amazon per ISBN -> Google Books per ISBN -> Open Library
+  (Open Library zuletzt: ihre Bilder liegen auf archive.org, das langsam und oft nicht erreichbar ist)
 Ein Treffer gilt nur, wenn Titel und Autor zusammenpassen.
 
 Beispiele:
   python3 find_covers.py                        # alle Bücher mit leerem Cover, nur Bericht
   python3 find_covers.py --ids 180 181 --apply  # nur diese ids suchen und Treffer in books-data.js schreiben
   python3 find_covers.py --apply --apply-authors --download-review
+  python3 find_covers.py --ids 7 9 --exclude-source openlibrary --replace --apply   # Open-Library-Cover ersetzen
 
 Ergebnis: work/covers.tsv, work/review.html, work/books-data.backup.js, mit --download-review work/review/<id>.jpg
 """
@@ -391,7 +391,14 @@ def main():
     ap.add_argument("--apply-authors", action="store_true", help="bestätigte Autoren eintragen")
     ap.add_argument("--download-review", action="store_true",
                     help="Kandidaten-Cover nach work/review/<id>.jpg laden (zum Ansehen ohne Browser)")
+    ap.add_argument("--exclude-source", action="append", default=[],
+                    choices=["labirint", "livelib", "openlibrary", "apple"],
+                    help="diese Quelle überspringen (mehrfach möglich)")
+    ap.add_argument("--replace", action="store_true",
+                    help="mit --apply auch vorhandene Cover der angegebenen ids ersetzen (nur zusammen mit --ids)")
     args = ap.parse_args()
+    if args.replace and not args.ids:
+        sys.exit("--replace nur zusammen mit --ids")
 
     books_file = args.books_file or os.path.join(ROOT, "home-library", "books-data.js")
     out_dir = args.out_dir or os.path.join(SKILL, "work")
@@ -450,7 +457,9 @@ def main():
                     "url": found.get("url", ""), "matched": found.get("matched", ""),
                     "acand": acand, "aconf": aconf, "title": b["title"]}
 
-        if "[уточнить" in b["title"] and len(words(title)) < 2 and not isbn_hint:
+        # Titel nicht sicher gelesen (Band, Untertitel): nicht raten, sonst kommt ein beliebiger Band heraus.
+        # Gesucht wird nur mit Hinweis (ISBN oder eigener Suchbegriff).
+        if "[уточнить" in b["title"] and not isbn_hint and not (h and h["query"]):
             results.append(result("SKIP"))
             continue
 
@@ -461,7 +470,8 @@ def main():
         if has_cyr(title) or has_cyr(author):
             order = ["labirint", "livelib", "openlibrary", "apple"]
         else:
-            order = ["openlibrary", "apple"]
+            order = ["apple"]
+        order = [o for o in order if o not in args.exclude_source]
         sources = {"labirint": src_labirint, "livelib": src_livelib,
                    "openlibrary": src_openlibrary, "apple": src_apple}
         for step in order:
@@ -486,6 +496,13 @@ def main():
                         found = cover_by_isbn(isbns)
         if not found and isbns:
             found = cover_by_isbn(isbns)
+        if not found and not has_cyr(title) and not has_cyr(author) and "openlibrary" not in args.exclude_source:
+            r = src_openlibrary(title, author, author_known)
+            if r:
+                if r.get("author"):
+                    authors.append(r["author"])
+                if r.get("url"):
+                    found = r
 
         # Autor fehlt auf dem Buchrücken: Kandidaten aus unabhängigen Quellen vergleichen
         #   yes      = Nachname bei mindestens zwei Quellen gleich (bestätigt)
@@ -570,7 +587,8 @@ def main():
             if m:
                 cur = int(m.group(1))
             if cur is not None:
-                if cur in cover_map and re.match(r'^\s+cover:\s*"",\s*$', line):
+                if cur in cover_map and (re.match(r'^\s+cover:\s*"",\s*$', line)
+                                         or (args.replace and re.match(r'^\s+cover:\s*".*",\s*$', line))):
                     line = '    cover: "%s",' % cover_map[cur]
                     nc += 1
                 elif cur in author_map and re.match(r'^\s+author:\s*".*не указан.*",\s*$', line):
