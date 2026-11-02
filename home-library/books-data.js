@@ -1,13 +1,16 @@
 // Список книг для домашней библиотеки.
 // Чтобы добавить книгу — скопируйте один объект и измените поля.
 // Поле "cover" — ссылка на обложку в интернете (например с covers.openlibrary.org).
-// Если ссылки нет или поле пустое, будет показана цветная заглушка с буквой.
+// Если ссылки нет, поле пустое или картинка не загрузилась, будет показана цветная заглушка со значком книги.
 // Поле "genre" — список жанров, можно указать несколько: genre: ["Классика", "Поэзия"].
 // Использовать только жанры из списка GENRES ниже. Если жанр неизвестен — genre: [].
 // Новый жанр добавляется в GENRES осознанно, а не «на лету» в карточке книги.
 // Поле "contents" (необязательное) — только у сборников: список произведений по оглавлению.
 // По нему работает поиск, а на обложке появляется метка «Сборник». Пример:
 //   contents: ["Драма на охоте", "Дуэль", "Анна на шее"]
+// Поле "language" — язык издания: ru, de, en, it, be, zh (по нему работает фильтр «Язык»).
+// Поля "series" и "volume" (необязательные) — серия и номер тома: тома идут подряд при сортировке,
+// серия ищется поиском. Пример:  series: "Gregs Tagebuch", volume: 13,
 
 const GENRES = [
   // Художественная литература
@@ -49,6 +52,7 @@ const BOOKS = [
     genre: ["Биография и мемуары"],
     cover: "https://covers.openlibrary.org/b/id/3204205-L.jpg",
     color: "#2d3436",
+    language: "de",
     description: "Немецкоязычное издание, сборник/составление под редакцией Вернера Фульда и Томаса Ф. Шнайдера."
   },
   {
@@ -58,6 +62,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/ac/0d/03/ac0d031a-62b2-e7ad-f1da-1f579e7cdac5/1048031957.jpg/600x600bb.jpg",
     color: "#636e72",
+    language: "en",
     description: "Английское издание. Роман-путешествие: давно расставшиеся супруги едут вместе на пикапе через всю страну, и по дороге раскрывается история их семьи и пропавшей дочери."
   },
   {
@@ -67,6 +72,7 @@ const BOOKS = [
     genre: ["Биография и мемуары", "Кулинария"],
     cover: "https://covers.openlibrary.org/b/id/11320064-L.jpg",
     color: "#e84393",
+    language: "ru",
     description: "Мемуары актёра Стэнли Туччи о еде, семье и кино."
   },
   {
@@ -76,6 +82,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://covers.openlibrary.org/b/id/8775559-L.jpg",
     color: "#fab1a0",
+    language: "ru",
     description: "Классический роман о взрослении четырёх сестёр Марч в Америке XIX века."
   },
   {
@@ -85,6 +92,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://covers.openlibrary.org/b/id/8797803-L.jpg",
     color: "#d63031",
+    language: "en",
     description: "Английское издание. Роман о трёх поколениях палестино-американских женщин и борьбе за собственный голос."
   },
   {
@@ -94,6 +102,7 @@ const BOOKS = [
     genre: ["Финансы и бизнес", "Сказки и притчи"],
     cover: "https://covers.openlibrary.org/b/id/10491331-L.jpg",
     color: "#e17055",
+    language: "ru",
     description: "Классическая книга о финансовой грамотности в форме притч о древнем Вавилоне."
   },
   {
@@ -103,6 +112,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://covers.openlibrary.org/b/id/5934583-L.jpg",
     color: "#dfe6e9",
+    language: "en",
     description: "Английское издание. Роман, вдохновлённый жизнью первой леди США."
   },
   {
@@ -112,6 +122,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://covers.openlibrary.org/b/id/1047242-L.jpg",
     color: "#2d3436",
+    language: "ru",
     description: "Поздний роман Набокова о запретной любви в вымышленном мире."
   },
   {
@@ -121,6 +132,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/698306/cover.jpg",
     color: "#00cec9",
+    language: "ru",
     description: "Сборник ранних рассказов Харуки Мураками, его первая книга короткой прозы.",
     contents: ["Медленной шлюпкой в Китай", "История бедной тетушки", "Трагедия на шахте в Нью-Йорке", "Кенгуриное коммюнике", "Последняя лужайка на сегодня", "Ее песик в земле", "Грин-стрит в Сиднее"]
   },
@@ -131,6 +143,7 @@ const BOOKS = [
     genre: ["Любовный роман"],
     cover: "https://covers.openlibrary.org/b/id/490280-L.jpg",
     color: "#fdcb6e",
+    language: "en",
     description: "Английское издание. Короткий роман о четырёхдневном романе фотографа и замужней женщины в Айове."
   },
   {
@@ -140,6 +153,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/15/d2/88/15d28894-d5f4-1902-2615-767c4f3ed1c7/9785001399889.jpg/600x600bb.jpg",
     color: "#a29bfe",
+    language: "ru",
     description: "Роман белорусской писательницы о детстве, памяти и месте, где выросла героиня."
   },
   {
@@ -149,6 +163,7 @@ const BOOKS = [
     genre: ["Классика", "Поэзия"],
     cover: "https://covers.openlibrary.org/b/id/8231991-L.jpg",
     color: "#636e72",
+    language: "ru",
     description: "Классика русской литературы — роман в стихах."
   },
   {
@@ -158,6 +173,7 @@ const BOOKS = [
     genre: ["История"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication118/v4/50/0a/28/500a2892-7d49-cb2f-7c22-0a202e1fb6d2/9785392272365.jpg/600x600bb.jpg",
     color: "#2d3436",
+    language: "ru",
     description: "Иллюстрированное издание по истории России."
   },
   {
@@ -167,6 +183,7 @@ const BOOKS = [
     genre: ["Исторический роман"],
     cover: "https://covers.openlibrary.org/b/id/12407157-L.jpg",
     color: "#00b894",
+    language: "en",
     description: "Английское издание. Исторический роман о ботаническом саде Эдинбурга начала XIX века."
   },
   {
@@ -176,6 +193,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://covers.openlibrary.org/b/id/12984540-L.jpg",
     color: "#fd79a8",
+    language: "en",
     description: "Английское издание романа Владимира Набокова."
   },
   {
@@ -185,6 +203,7 @@ const BOOKS = [
     genre: ["Биография и мемуары", "Искусство и мода"],
     cover: "https://covers.openlibrary.org/b/id/2044070-L.jpg",
     color: "#e17055",
+    language: "en",
     description: "Английское издание мемуаров модельера Эльзы Скиапарелли."
   },
   {
@@ -194,6 +213,7 @@ const BOOKS = [
     genre: ["Современная проза", "Фантастика"],
     cover: "https://covers.openlibrary.org/b/id/10305046-L.jpg",
     color: "#dfe6e9",
+    language: "ru",
     description: "Повесть Владимира Сорокина о докторе, пытающемся добраться до заражённой деревни сквозь метель."
   },
   {
@@ -203,6 +223,7 @@ const BOOKS = [
     genre: ["Фантастика"],
     cover: "",
     color: "#0984e3",
+    language: "zh",
     description: "Издание на китайском языке, автор Лю Цысинь. Точное название на корешке не разобрано — стоит уточнить."
   },
   {
@@ -212,6 +233,9 @@ const BOOKS = [
     genre: ["Фантастика"],
     cover: "https://covers.openlibrary.org/b/id/10526598-L.jpg",
     color: "#0984e3",
+    language: "ru",
+    series: "Задача трёх тел",
+    volume: 2,
     description: "Вторая книга трилогии «Задача трёх тел»."
   },
   {
@@ -221,6 +245,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "",
     color: "#00cec9",
+    language: "ru",
     description: "Роман Виктора Пелевина."
   },
   {
@@ -230,6 +255,7 @@ const BOOKS = [
     genre: ["Биография и мемуары", "Искусство и мода"],
     cover: "https://covers.openlibrary.org/b/id/6299761-L.jpg",
     color: "#2d3436",
+    language: "en",
     description: "Английское издание. Биография Коко Шанель."
   },
 
@@ -241,6 +267,8 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "",
     color: "#fdcb6e",
+    language: "de",
+    series: "Gregs Tagebuch",
     description: "Немецкое издание из серии «Дневник слабака» Джеффа Кинни. Номер тома на корешке не разобран, подзаголовок по-русски был записан как «Держи хвост пистолетом» — стоит сверить с корешком."
   },
   {
@@ -250,6 +278,9 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833936592.01._SCLZZZZZZZ_.jpg",
     color: "#e17055",
+    language: "de",
+    series: "Gregs Tagebuch",
+    volume: 13,
     description: "Немецкое издание, том 13 серии «Дневник слабака» Джеффа Кинни."
   },
   {
@@ -259,6 +290,9 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833910615.01._SCLZZZZZZZ_.jpg",
     color: "#fab1a0",
+    language: "de",
+    series: "Gregs Tagebuch",
+    volume: 20,
     description: "Немецкое издание, том 20 серии «Дневник слабака» Джеффа Кинни."
   },
   {
@@ -268,6 +302,9 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833907509.01._SCLZZZZZZZ_.jpg",
     color: "#00b894",
+    language: "de",
+    series: "Gregs Tagebuch",
+    volume: 17,
     description: "Немецкое издание, том 17 серии «Дневник слабака» Джеффа Кинни."
   },
   {
@@ -277,6 +314,9 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833907908.01._SCLZZZZZZZ_.jpg",
     color: "#636e72",
+    language: "de",
+    series: "Gregs Tagebuch",
+    volume: 18,
     description: "Немецкое издание, том 18 серии «Дневник слабака» Джеффа Кинни."
   },
   {
@@ -286,6 +326,9 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3833906804.01._SCLZZZZZZZ_.jpg",
     color: "#0984e3",
+    language: "de",
+    series: "Gregs Tagebuch",
+    volume: 16,
     description: "Немецкое издание, том 16 серии «Дневник слабака» Джеффа Кинни."
   },
   {
@@ -295,6 +338,9 @@ const BOOKS = [
     genre: ["Детская литература", "Фэнтези"],
     cover: "https://covers.openlibrary.org/b/id/14601475-L.jpg",
     color: "#00cec9",
+    language: "de",
+    series: "Percy Jackson",
+    volume: 3,
     description: "Немецкое издание. Часть серии «Перси Джексон и олимпийцы»."
   },
   {
@@ -304,6 +350,9 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор", "Приключения"],
     cover: "https://covers.openlibrary.org/b/id/9367879-L.jpg",
     color: "#74b9ff",
+    language: "en",
+    series: "Treehouse",
+    volume: 6,
     description: "Английское издание. Часть серии «Дом на дереве»."
   },
   {
@@ -313,6 +362,7 @@ const BOOKS = [
     genre: ["Детская литература"],
     cover: "https://s1.livelib.ru/boocover/1003353972/200x305/b4a0/boocover.jpg",
     color: "#00b894",
+    language: "ru",
     description: "Детская книга на русском языке. Автора стоит уточнить."
   },
   {
@@ -322,24 +372,31 @@ const BOOKS = [
     genre: ["Детская литература", "Фэнтези"],
     cover: "https://covers.openlibrary.org/b/id/10580435-L.jpg",
     color: "#fdcb6e",
+    language: "ru",
+    series: "Гарри Поттер",
+    volume: 3,
     description: "Третья книга серии о Гарри Поттере, издание на русском языке."
   },
   {
     id: 38,
     title: "Der Schatz der Piraten",
-    author: "серия «Minuten-Geschichten zum Lesenlernen»",
+    author: "автор не указан на корешке",
     genre: ["Детская литература", "Приключения"],
     cover: "",
     color: "#0984e3",
+    language: "de",
+    series: "Minuten-Geschichten zum Lesenlernen",
     description: "Немецкая книга для начинающих читателей о пиратском сокровище."
   },
   {
     id: 39,
     title: "Das magische Baumhaus",
-    author: "серия LESEKÖNIG",
+    author: "Mary Pope Osborne",
     genre: ["Детская литература", "Фэнтези", "Приключения"],
     cover: "",
     color: "#74b9ff",
+    language: "de",
+    series: "Das magische Baumhaus",
     description: "Немецкое издание книги для чтения из серии «Волшебный дом на дереве»."
   },
   {
@@ -349,6 +406,7 @@ const BOOKS = [
     genre: ["Детская литература"],
     cover: "https://m.media-amazon.com/images/P/3743205424.01._SCLZZZZZZZ_.jpg",
     color: "#0984e3",
+    language: "de",
     description: "Немецкое издание: сборник коротких историй для начинающих читателей (серия «7-Minuten-Geschichten zum Lesenlernen», Loewe)."
   },
   {
@@ -358,6 +416,7 @@ const BOOKS = [
     genre: ["Детская литература"],
     cover: "https://m.media-amazon.com/images/P/3785576153.01._SCLZZZZZZZ_.jpg",
     color: "#2d3436",
+    language: "de",
     description: "Немецкая детская книга для самостоятельного чтения (издательство Loewe)."
   },
   {
@@ -367,6 +426,7 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3499218216.01._SCLZZZZZZZ_.jpg",
     color: "#2d3436",
+    language: "de",
     description: "Немецкое издание книги Дэвида Уолльямса о полуночной банде в детской больнице."
   },
   {
@@ -376,6 +436,7 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/349900061X.01._SCLZZZZZZZ_.jpg",
     color: "#fdcb6e",
+    language: "de",
     description: "Немецкое издание сборника рассказов Дэвида Уолльямса."
   },
   {
@@ -385,6 +446,7 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/3757100352.01._SCLZZZZZZZ_.jpg",
     color: "#d63031",
+    language: "de",
     description: "Немецкое издание сборника рассказов Дэвида Уолльямса."
   },
   {
@@ -394,6 +456,9 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор", "Приключения"],
     cover: "https://m.media-amazon.com/images/P/3843211051.01._SCLZZZZZZZ_.jpg",
     color: "#e17055",
+    language: "de",
+    series: "Das verrückte Baumhaus",
+    volume: 1,
     description: "Немецкое издание из серии «Сумасшедший дом на дереве»."
   },
   {
@@ -403,6 +468,9 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор", "Приключения"],
     cover: "https://m.media-amazon.com/images/P/3833907118.01._SCLZZZZZZZ_.jpg",
     color: "#6c5ce7",
+    language: "de",
+    series: "Das verrückte Baumhaus",
+    volume: 4,
     description: "Немецкое издание из серии «Сумасшедший дом на дереве»."
   },
   {
@@ -412,6 +480,9 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор", "Приключения"],
     cover: "https://m.media-amazon.com/images/P/3833904658.01._SCLZZZZZZZ_.jpg",
     color: "#fdcb6e",
+    language: "de",
+    series: "Das verrückte Baumhaus",
+    volume: 3,
     description: "Немецкое издание из серии «Сумасшедший дом на дереве»."
   },
   {
@@ -421,6 +492,7 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://m.media-amazon.com/images/P/374592911X.01._SCLZZZZZZZ_.jpg",
     color: "#d63031",
+    language: "de",
     description: "Немецкое издание книги Лиз Пичон."
   },
   {
@@ -430,6 +502,7 @@ const BOOKS = [
     genre: ["Детская литература", "Фантастика"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication128/v4/a3/8b/e9/a38be99c-4a74-7549-cb6a-f2420c55e037/9700000267120.jpg/600x600bb.jpg",
     color: "#00b894",
+    language: "ru",
     description: "Повесть о двух школьниках из разных эпох, которые меняются местами во времени."
   },
 
@@ -441,6 +514,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://img1.labirint.ru/books/1009706/cover.jpg",
     color: "#6c5ce7",
+    language: "ru",
     description: "Сборник Булгакова: «Мастер и Маргарита», «Театральный роман» и рассказы. Издание «Жалын», Алма-Ата, 1988."
   },
   {
@@ -450,6 +524,7 @@ const BOOKS = [
     genre: ["Фантастика"],
     cover: "https://s1.livelib.ru/boocover/1000274761/200x305/5df7/boocover.jpg",
     color: "#0984e3",
+    language: "ru",
     description: "Издание Аркадия и Бориса Стругацких в тёмно-бордовом переплёте."
   },
   {
@@ -459,6 +534,7 @@ const BOOKS = [
     genre: ["Классика", "Поэзия"],
     cover: "https://s1.livelib.ru/boocover/1000521988/200x305/6dfe/boocover.jpg",
     color: "#00b894",
+    language: "ru",
     description: "Сборник трагедий и сонетов Шекспира, «Просвещение», 1985: переводы Б. Пастернака, М. Лозинского и С. Маршака, статьи А. Аникста.",
     contents: ["Ромео и Джульетта", "Гамлет, принц Датский", "Король Лир", "Сонеты"]
   },
@@ -469,6 +545,7 @@ const BOOKS = [
     genre: ["Классика", "Поэзия"],
     cover: "https://img1.labirint.ru/books/859253/cover.jpg",
     color: "#e17055",
+    language: "ru",
     description: "Знаменитый поэтический сборник Шарля Бодлера."
   },
   {
@@ -478,6 +555,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://img1.labirint.ru/books/623275/cover.jpg",
     color: "#fdcb6e",
+    language: "ru",
     description: "Трагедия Шекспира, издание МИФ."
   },
   {
@@ -487,6 +565,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://img1.labirint.ru/books/596509/cover.jpg",
     color: "#d63031",
+    language: "ru",
     description: "Комедия Шекспира, издание МИФ."
   },
   {
@@ -496,6 +575,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://img1.labirint.ru/books/868245/cover.jpg",
     color: "#2d3436",
+    language: "ru",
     description: "Роман Лермонтова о Печорине, издание МИФ."
   },
   {
@@ -505,6 +585,7 @@ const BOOKS = [
     genre: ["Классика", "Приключения"],
     cover: "https://img1.labirint.ru/books/697728/cover.jpg",
     color: "#636e72",
+    language: "ru",
     description: "Цикл приключенческих историй Стивенсона, издание МИФ."
   },
   {
@@ -514,6 +595,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication/v4/74/3e/9e/743e9e1e-0231-fa73-69fb-6352e07bb6f6/Screen_Shot_2013-04-26_at_5.39.32_PM.png/600x600bb.jpg",
     color: "#e84393",
+    language: "ru",
     description: "Роман о враче-эмигранте в предвоенном Париже."
   },
   {
@@ -523,6 +605,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/628797/cover.jpg",
     color: "#00cec9",
+    language: "ru",
     description: "Роман Дины Рубиной о детстве и судьбе героини в послевоенном Ташкенте."
   },
   {
@@ -532,6 +615,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/686927/cover.jpg",
     color: "#a29bfe",
+    language: "ru",
     description: "Роман Алексея Иванова о жизни в российской провинции."
   },
   {
@@ -541,6 +625,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/531770/cover.jpg",
     color: "#74b9ff",
+    language: "ru",
     description: "Роман о школьном учителе географии и его классе, сплав по реке."
   },
   {
@@ -550,6 +635,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/794460/cover.jpg",
     color: "#fab1a0",
+    language: "ru",
     description: "Автобиографическая повесть о мальчике Саше, который растёт с бабушкой и дедом."
   },
   {
@@ -559,6 +645,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/10/49/3a/10493a2a-0d23-d930-094f-579f11cbb82b/9785457207141.jpg/600x600bb.jpg",
     color: "#fd79a8",
+    language: "ru",
     description: "Книга Людмилы Улицкой."
   },
   {
@@ -568,16 +655,18 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://s1.livelib.ru/boocover/1000011710/200x305/551a/boocover.jpg",
     color: "#6c5ce7",
+    language: "ru",
     description: "Сборник рассказов и повестей Людмилы Улицкой."
   },
   {
     id: 65,
     title: "mASIAfucker",
-    author: "Илья Стогофф",
+    author: "Илья Стогов",
     genre: ["Современная проза"],
     cover: "https://s1.livelib.ru/boocover/1008286477/200x305/f736/boocover.jpg",
     color: "#0984e3",
-    description: "Роман Ильи Стогоффа о путешествии по Азии."
+    language: "ru",
+    description: "Роман Ильи Стогова о путешествии по Азии."
   },
   {
     id: 66,
@@ -586,6 +675,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/b3/b6/87/b3b68775-8738-8791-c21b-f8ddb932b5a7/9785425052957.jpg/600x600bb.jpg",
     color: "#00b894",
+    language: "ru",
     description: "Роман Михаила Веллера."
   },
   {
@@ -595,6 +685,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://s1.livelib.ru/boocover/1001119327/200x305/3162/boocover.jpg",
     color: "#e17055",
+    language: "ru",
     description: "Книга Михаила Веллера."
   },
   {
@@ -604,6 +695,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://s1.livelib.ru/boocover/1002197075/200x305/1614/boocover.jpg",
     color: "#fdcb6e",
+    language: "ru",
     description: "Сборник из двух романов Михаила Веллера в одном томе.",
     contents: ["Приключения майора Звягина", "Гонец из Пизы"]
   },
@@ -614,6 +706,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/55/3c/4d/553c4d40-1ad1-9950-24b2-2f12a4a0dbf9/9785001396833.jpg/600x600bb.jpg",
     color: "#d63031",
+    language: "ru",
     description: "Роман в двух томах (на полке оба тома)."
   },
   {
@@ -623,6 +716,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "",
     color: "#2d3436",
+    language: "ru",
     description: "Название на корешке не разобрано — стоит уточнить и поправить."
   },
   {
@@ -632,6 +726,7 @@ const BOOKS = [
     genre: ["Современная проза", "Фантастика"],
     cover: "https://i.livelib.ru/workpic/1000877593/200x305/1695/workpic.jpg",
     color: "#636e72",
+    language: "ru",
     description: "Роман Владимира Сорокина."
   },
   {
@@ -641,6 +736,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/131258/cover.jpg",
     color: "#e84393",
+    language: "ru",
     description: "Повесть Сергея Минаева."
   },
   {
@@ -650,15 +746,17 @@ const BOOKS = [
     genre: ["Современная проза", "Фантастика"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/df/fb/34/dffb3479-6e38-c4b6-b638-86eddb4e4c24/1042613248.jpg/600x600bb.jpg",
     color: "#00cec9",
+    language: "ru",
     description: "Роман Ивана Филиппова (Freedom Letters, 2023) о зомби-апокалипсисе в Москве: из научного института сбегает инфицированная мышь."
   },
   {
     id: 74,
     title: "Шкафы и скелеты: 40 лучших рассказов 2008 года",
-    author: "Сборник",
+    author: "разные авторы",
     genre: ["Современная проза"],
     cover: "",
     color: "#a29bfe",
+    language: "ru",
     description: "Антология современных рассказов, издательство «ФРАМ»."
   },
   {
@@ -668,6 +766,9 @@ const BOOKS = [
     genre: ["Фэнтези", "Сказки и притчи"],
     cover: "https://s1.livelib.ru/boocover/1000158306/200x305/b65c/boocover.jpg",
     color: "#74b9ff",
+    language: "ru",
+    series: "Русские инородные сказки",
+    volume: 4,
     description: "Четвёртый сборник «Русских инородных сказок» Макса Фрая."
   },
   {
@@ -677,6 +778,7 @@ const BOOKS = [
     genre: ["Фэнтези"],
     cover: "https://img1.labirint.ru/books/467574/cover.jpg",
     color: "#fab1a0",
+    language: "ru",
     description: "Роман Макса Фрая, издательство «Амфора»."
   },
   {
@@ -686,6 +788,9 @@ const BOOKS = [
     genre: ["Фэнтези", "Фантастика"],
     cover: "https://img1.labirint.ru/books/714154/cover.jpg",
     color: "#fd79a8",
+    language: "ru",
+    series: "Дозоры",
+    volume: 3,
     description: "Книга цикла «Дозоры» о противостоянии Светлых и Тёмных Иных."
   },
 
@@ -697,6 +802,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/488542/cover.jpg",
     color: "#6c5ce7",
+    language: "ru",
     description: "Роман Виктора Пелевина о поэте Петре Пустоте и Василии Чапаеве."
   },
   {
@@ -706,6 +812,7 @@ const BOOKS = [
     genre: ["Современная проза", "Фантастика"],
     cover: "https://img1.labirint.ru/books/511348/cover.jpg",
     color: "#0984e3",
+    language: "ru",
     description: "Роман Виктора Пелевина — миф о Минотавре в формате интернет-чата."
   },
   {
@@ -715,6 +822,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/545496/cover.jpg",
     color: "#00b894",
+    language: "ru",
     description: "Роман Виктора Пелевина."
   },
   {
@@ -724,6 +832,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/894237/cover.jpg",
     color: "#e17055",
+    language: "ru",
     description: "Роман Виктора Пелевина «Диалектика Переходного Периода из Ниоткуда в Никуда»."
   },
   {
@@ -733,6 +842,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/850840/cover.jpg",
     color: "#fdcb6e",
+    language: "ru",
     description: "Роман Виктора Пелевина, продолжение «Ампира V»."
   },
   {
@@ -742,6 +852,7 @@ const BOOKS = [
     genre: ["Современная проза", "Фантастика"],
     cover: "https://img1.labirint.ru/books/871057/cover.jpg",
     color: "#d63031",
+    language: "ru",
     description: "Роман Виктора Пелевина."
   },
   {
@@ -751,6 +862,9 @@ const BOOKS = [
     genre: ["Современная проза", "Фантастика"],
     cover: "https://img1.labirint.ru/books/495748/cover.jpg",
     color: "#2d3436",
+    language: "ru",
+    series: "Смотритель",
+    volume: 2,
     description: "Вторая книга романа «Смотритель»."
   },
   {
@@ -760,6 +874,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/515014/cover.jpg",
     color: "#636e72",
+    language: "ru",
     description: "Роман Виктора Пелевина."
   },
   {
@@ -769,6 +884,7 @@ const BOOKS = [
     genre: ["Современная проза", "Фантастика"],
     cover: "https://img1.labirint.ru/books/860762/cover.jpg",
     color: "#e84393",
+    language: "ru",
     description: "Роман Виктора Пелевина."
   },
   {
@@ -778,6 +894,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "",
     color: "#00cec9",
+    language: "ru",
     description: "Белый корешок с логотипом-глазом в пирамиде и издательством «Эксмо». Название не разобрано — стоит уточнить."
   },
   {
@@ -787,6 +904,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "",
     color: "#a29bfe",
+    language: "ru",
     description: "Название на корешке не разобрано — стоит уточнить и поправить."
   },
 
@@ -798,6 +916,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/640392/cover.jpg",
     color: "#74b9ff",
+    language: "ru",
     description: "Роман Харуки Мураками."
   },
   {
@@ -807,6 +926,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/935940/cover.jpg",
     color: "#fab1a0",
+    language: "ru",
     description: "Роман Харуки Мураками, издательство «Амфора», 2003."
   },
   {
@@ -816,6 +936,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/908561/cover.jpg",
     color: "#fd79a8",
+    language: "ru",
     description: "Роман Харуки Мураками."
   },
   {
@@ -825,6 +946,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/906543/cover.jpg",
     color: "#6c5ce7",
+    language: "ru",
     description: "Роман Харуки Мураками."
   },
   {
@@ -834,6 +956,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://s1.livelib.ru/boocover/1000653810/200x305/50ae/boocover.jpg",
     color: "#0984e3",
+    language: "ru",
     description: "Сборник рассказов Харуки Мураками.",
     contents: ["Призраки Лексингтона", "Зелёный зверь", "Молчание", "Ледяной человек", "Тони Такитани", "Седьмой мужчина", "Слепая ива и спящая женщина"]
   },
@@ -844,6 +967,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/934896/cover.jpg",
     color: "#00b894",
+    language: "ru",
     description: "Сборник рассказов Харуки Мураками о мужчинах, оставшихся без женщин.",
     contents: ["Влюблённый Замза", "Drive My Car", "Yesterday", "Независимый орган", "Шахразада", "Кино", "Мужчины без женщин"]
   },
@@ -854,6 +978,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://s1.livelib.ru/boocover/1000641072/200x305/cb63/boocover.jpg",
     color: "#e17055",
+    language: "ru",
     description: "Роман в трёх книгах (апрель–июнь, июль–сентябрь, октябрь–декабрь); на полке все три тома."
   },
   {
@@ -863,6 +988,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://img1.labirint.ru/books/926358/cover.jpg",
     color: "#fdcb6e",
+    language: "ru",
     description: "Сборник из двух ранних повестей Харуки Мураками, первые части «Трилогии Крысы».",
     contents: ["Слушай песню ветра", "Пинбол 1973"]
   },
@@ -873,6 +999,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication123/v4/bd/0f/42/bd0f42ad-927c-bb79-1be6-33649178867b/MURAKAMICOVER9.png/600x600bb.jpg",
     color: "#d63031",
+    language: "ru",
     description: "Роман Харуки Мураками."
   },
   {
@@ -882,6 +1009,7 @@ const BOOKS = [
     genre: ["Публицистика"],
     cover: "https://img1.labirint.ru/books/583368/cover.jpg",
     color: "#2d3436",
+    language: "ru",
     description: "Документальная книга Мураками о теракте в токийском метро в 1995 году."
   },
 
@@ -893,6 +1021,9 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://covers.openlibrary.org/b/id/7376568-L.jpg",
     color: "#636e72",
+    language: "it",
+    series: "L'amica geniale",
+    volume: 4,
     description: "Итальянское издание. Заключительная книга неаполитанского цикла."
   },
   {
@@ -902,6 +1033,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://covers.openlibrary.org/b/id/13233202-L.jpg",
     color: "#e84393",
+    language: "it",
     description: "Итальянское издание, издательство Bollati Boringhieri."
   },
   {
@@ -911,6 +1043,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication128/v4/e6/e7/74/e6e77484-a13c-8234-e09a-83863be7f0bc/9783832184322.jpg/600x600bb.jpg",
     color: "#00cec9",
+    language: "de",
     description: "Немецкое издание, издательство DuMont."
   },
   {
@@ -920,6 +1053,7 @@ const BOOKS = [
     genre: ["Биография и мемуары"],
     cover: "https://covers.openlibrary.org/b/id/8046516-L.jpg",
     color: "#a29bfe",
+    language: "en",
     description: "Английское издание. Биография Джейн Остин."
   },
   {
@@ -929,6 +1063,7 @@ const BOOKS = [
     genre: ["Исторический роман"],
     cover: "https://covers.openlibrary.org/b/id/10427361-L.jpg",
     color: "#74b9ff",
+    language: "en",
     description: "Английское издание. Исторический роман о Нью-Йорке."
   },
   {
@@ -938,6 +1073,7 @@ const BOOKS = [
     genre: ["Современная проза", "Исторический роман"],
     cover: "https://covers.openlibrary.org/b/id/14421778-L.jpg",
     color: "#fab1a0",
+    language: "en",
     description: "Английское издание. Роман об одном доме и его обитателях на протяжении веков."
   },
   {
@@ -947,6 +1083,7 @@ const BOOKS = [
     genre: ["Современная проза"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/f5/e2/53/f5e25353-2f25-e3b3-fa4f-8136dc35d3a9/9781488077210.jpg/600x600bb.jpg",
     color: "#fd79a8",
+    language: "en",
     description: "Английское издание. Роман о кафе, где можно вернуться в прошлое."
   },
   {
@@ -956,6 +1093,7 @@ const BOOKS = [
     genre: ["Биография и мемуары"],
     cover: "https://img1.labirint.ru/books/785081/cover.jpg",
     color: "#6c5ce7",
+    language: "ru",
     description: "Документальная история Билли Миллигана — человека с множественной личностью."
   },
 
@@ -967,6 +1105,7 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "https://img1.labirint.ru/books/865475/cover.jpg",
     color: "#0984e3",
+    language: "ru",
     description: "Научно-популярная книга Якова Перельмана, серия «Книги, о которых говорят»."
   },
   {
@@ -976,6 +1115,7 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/ab/d1/c9/abd1c930-564e-8928-3929-04b745898de7/9785457165922.jpg/600x600bb.jpg",
     color: "#00b894",
+    language: "ru",
     description: "Научно-популярная книга Якова Перельмана, серия «Книги, о которых говорят»."
   },
   {
@@ -985,6 +1125,7 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/28/37/0e/28370e85-1893-8ec0-795c-faa563133e61/9785002234356.jpg/600x600bb.jpg",
     color: "#e17055",
+    language: "ru",
     description: "Научно-популярная книга Алексея Семихатова, издательство АНФ."
   },
   {
@@ -994,6 +1135,7 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "https://s1.livelib.ru/boocover/1008191389/200x305/5813/boocover.jpg",
     color: "#fdcb6e",
+    language: "ru",
     description: "Лекции Алексея Савватеева по математике для нематематиков."
   },
   {
@@ -1003,6 +1145,8 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "https://m.media-amazon.com/images/P/9089983961.01._SCLZZZZZZZ_.jpg",
     color: "#d63031",
+    language: "de",
+    series: "in 30 Sekunden",
     description: "Немецкое издание, серия «in 30 Sekunden» (Libero)."
   },
   {
@@ -1012,6 +1156,8 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "https://m.media-amazon.com/images/P/908998397X.01._SCLZZZZZZZ_.jpg",
     color: "#2d3436",
+    language: "de",
+    series: "in 30 Sekunden",
     description: "Немецкое издание, серия «in 30 Sekunden» (Libero)."
   },
   {
@@ -1021,6 +1167,7 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "https://m.media-amazon.com/images/P/3423340894.01._SCLZZZZZZZ_.jpg",
     color: "#636e72",
+    language: "de",
     description: "Немецкое издание книги Стивена Хокинга «Вселенная в ореховой скорлупке»."
   },
   {
@@ -1030,6 +1177,7 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "",
     color: "#e84393",
+    language: "de",
     description: "Немецкое издание: вопросы и ответы по науке и технике."
   },
   {
@@ -1039,6 +1187,7 @@ const BOOKS = [
     genre: ["Саморазвитие и психология", "Финансы и бизнес"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication112/v4/12/ff/23/12ff235d-ab69-4b5a-c5b9-9e9a802f3fb3/9783843704458.jpg/600x600bb.jpg",
     color: "#00cec9",
+    language: "de",
     description: "Немецкое издание книги Тимоти Ферриса «Четырёхчасовая рабочая неделя»."
   },
   {
@@ -1048,6 +1197,7 @@ const BOOKS = [
     genre: ["Здоровье и спорт"],
     cover: "https://covers.openlibrary.org/b/id/1014100-L.jpg",
     color: "#a29bfe",
+    language: "de",
     description: "Немецкое издание (rororo Sport). Книга об Ironman."
   },
   {
@@ -1057,6 +1207,7 @@ const BOOKS = [
     genre: ["Здоровье и спорт"],
     cover: "https://covers.openlibrary.org/b/id/8903210-L.jpg",
     color: "#74b9ff",
+    language: "de",
     description: "Немецкое издание. Большая книга о марафоне."
   },
   {
@@ -1066,6 +1217,7 @@ const BOOKS = [
     genre: ["Здоровье и спорт"],
     cover: "",
     color: "#fab1a0",
+    language: "de",
     description: "Немецкий журнал: от Парижа до Сан-Диего, истории о Гавайях, триатлон в Германии."
   },
   {
@@ -1075,6 +1227,7 @@ const BOOKS = [
     genre: ["Здоровье и спорт"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/29/0a/01/290a01bf-6960-c907-ad01-701fc74902d5/9783946566298.jpg/600x600bb.jpg",
     color: "#fd79a8",
+    language: "en",
     description: "Английское издание. Книга о питании и здоровье."
   },
 
@@ -1086,6 +1239,7 @@ const BOOKS = [
     genre: ["Кулинария"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication125/v4/39/60/49/396049ba-b170-6ec5-202c-22a168edac64/9783962570262.jpg/600x600bb.jpg",
     color: "#6c5ce7",
+    language: "de",
     description: "Немецкое издание. Кулинарная книга по принципам «How Not to Die»."
   },
   {
@@ -1095,6 +1249,7 @@ const BOOKS = [
     genre: ["Кулинария"],
     cover: "https://m.media-amazon.com/images/P/3831029423.01._SCLZZZZZZZ_.jpg",
     color: "#0984e3",
+    language: "de",
     description: "Немецкое издание, издательство DK. Растительные источники белка."
   },
   {
@@ -1104,6 +1259,7 @@ const BOOKS = [
     genre: ["Кулинария"],
     cover: "https://m.media-amazon.com/images/P/3625172534.01._SCLZZZZZZZ_.jpg",
     color: "#00b894",
+    language: "de",
     description: "Немецкое издание, издательство NGV."
   },
 
@@ -1115,6 +1271,7 @@ const BOOKS = [
     genre: ["Искусство и мода"],
     cover: "https://m.media-amazon.com/images/P/380942997X.01._SCLZZZZZZZ_.jpg",
     color: "#e17055",
+    language: "de",
     description: "Немецкое издание. Большой иллюстрированный альбом о птицах."
   },
   {
@@ -1124,6 +1281,7 @@ const BOOKS = [
     genre: ["Искусство и мода"],
     cover: "https://covers.openlibrary.org/b/id/8845133-L.jpg",
     color: "#fdcb6e",
+    language: "de",
     description: "Немецкое издание, TASCHEN."
   },
   {
@@ -1133,6 +1291,7 @@ const BOOKS = [
     genre: ["Искусство и мода"],
     cover: "https://covers.openlibrary.org/b/id/10533418-L.jpg",
     color: "#d63031",
+    language: "de",
     description: "Немецкое издание, TASCHEN."
   },
   {
@@ -1142,6 +1301,7 @@ const BOOKS = [
     genre: ["Искусство и мода"],
     cover: "https://m.media-amazon.com/images/P/3836527812.01._SCLZZZZZZZ_.jpg",
     color: "#2d3436",
+    language: "de",
     description: "Немецкое издание, TASCHEN."
   },
   {
@@ -1151,6 +1311,7 @@ const BOOKS = [
     genre: ["Искусство и мода"],
     cover: "https://covers.openlibrary.org/b/id/1029592-L.jpg",
     color: "#636e72",
+    language: "de",
     description: "Немецкое издание, TASCHEN."
   },
   {
@@ -1160,6 +1321,7 @@ const BOOKS = [
     genre: ["Искусство и мода"],
     cover: "https://covers.openlibrary.org/b/id/1030588-L.jpg",
     color: "#e84393",
+    language: "en",
     description: "Английское издание, TASCHEN (Bibliotheca Universalis)."
   },
   {
@@ -1169,15 +1331,17 @@ const BOOKS = [
     genre: ["Искусство и мода", "История"],
     cover: "https://covers.openlibrary.org/b/id/13797455-L.jpg",
     color: "#00cec9",
+    language: "de",
     description: "Немецкое издание «Истории искусства» Эрнста Гомбриха (Phaidon)."
   },
   {
     id: 130,
     title: "Энциклопедия мирового искусства: Мастера русской живописи",
-    author: "Сборник",
+    author: "Белый город",
     genre: ["Искусство и мода", "Техническая, учебная и справочная литература"],
     cover: "",
     color: "#a29bfe",
+    language: "ru",
     description: "Энциклопедия издательства «Белый город»."
   },
   {
@@ -1187,6 +1351,9 @@ const BOOKS = [
     genre: ["Искусство и мода"],
     cover: "",
     color: "#74b9ff",
+    language: "de",
+    series: "Weltkunst",
+    volume: 236,
     description: "Журнал: Jahresvorschau 2025, Museen am Pazifik, три дня в Кёльне, Ирландия."
   },
   {
@@ -1196,6 +1363,9 @@ const BOOKS = [
     genre: ["Искусство и мода"],
     cover: "",
     color: "#fab1a0",
+    language: "de",
+    series: "Weltkunst",
+    volume: 237,
     description: "Журнал: обзор арт-рынка, квир-живопись, три дня в Гонконге."
   },
   {
@@ -1205,6 +1375,9 @@ const BOOKS = [
     genre: ["Искусство и мода"],
     cover: "",
     color: "#fd79a8",
+    language: "de",
+    series: "Weltkunst",
+    volume: 238,
     description: "Журнал: японская цветная гравюра, Хелен Франкенталер, Кунстмузеум Штутгарт."
   },
   {
@@ -1214,6 +1387,7 @@ const BOOKS = [
     genre: ["Путешествия"],
     cover: "https://m.media-amazon.com/images/P/3575012350.01._SCLZZZZZZZ_.jpg",
     color: "#6c5ce7",
+    language: "de",
     description: "Немецкое издание путеводителя Lonely Planet."
   },
 
@@ -1221,10 +1395,11 @@ const BOOKS = [
   {
     id: 135,
     title: "Baden-Württemberg: Eine kleine politische Landeskunde",
-    author: "Сборник",
+    author: "LpB Baden-Württemberg",
     genre: ["Техническая, учебная и справочная литература"],
     cover: "",
     color: "#0984e3",
+    language: "de",
     description: "Немецкое издание: краткий политический обзор земли Баден-Вюртемберг."
   },
   {
@@ -1234,6 +1409,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://covers.openlibrary.org/b/id/8714917-L.jpg",
     color: "#00b894",
+    language: "de",
     description: "Немецкий учебник по высшей математике."
   },
   {
@@ -1243,6 +1419,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "",
     color: "#e17055",
+    language: "de",
     description: "Немецкое издание Гражданского кодекса."
   },
   {
@@ -1252,6 +1429,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "",
     color: "#fdcb6e",
+    language: "ru",
     description: "Карманный словарь."
   },
   {
@@ -1261,6 +1439,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://m.media-amazon.com/images/P/3125141052.01._SCLZZZZZZZ_.jpg",
     color: "#d63031",
+    language: "de",
     description: "Карманный словарь швабского диалекта (на полке два экземпляра/тома)."
   },
   {
@@ -1270,6 +1449,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://m.media-amazon.com/images/P/3832537465.01._SCLZZZZZZZ_.jpg",
     color: "#2d3436",
+    language: "en",
     description: "Английское издание. Техническая работа по сетевым системам управления."
   },
   {
@@ -1279,6 +1459,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://covers.openlibrary.org/b/id/1633655-L.jpg",
     color: "#636e72",
+    language: "de",
     description: "Немецкое издание (Voggenreiter). Учебник игры на акустической гитаре."
   },
   {
@@ -1288,42 +1469,47 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "",
     color: "#e84393",
+    language: "de",
     description: "Технический журнал по автоматизации."
   },
   {
     id: 143,
     title: "Im Blickpunkt: Deutschlands Exzellenz-Institute — ISW Universität Stuttgart",
-    author: "Сборник",
+    author: "автор не указан на корешке",
     genre: ["Техническая, учебная и справочная литература"],
     cover: "",
     color: "#00cec9",
+    language: "de",
     description: "Тонкая брошюра об институте ISW Университета Штутгарта."
   },
   {
     id: 144,
     title: "Universität Stuttgart",
-    author: "Сборник",
+    author: "автор не указан на корешке",
     genre: ["Техническая, учебная и справочная литература"],
     cover: "",
     color: "#a29bfe",
+    language: "de",
     description: "Издание об Университете Штутгарта. Название разобрано частично — стоит уточнить."
   },
   {
     id: 145,
     title: "Deutsch aktiv Neu: Arbeitsbuch 1C",
-    author: "Langenscheidt",
+    author: "Kees van Eunen u. a.",
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://m.media-amazon.com/images/P/3468491417.01._SCLZZZZZZZ_.jpg",
     color: "#74b9ff",
+    language: "de",
     description: "Рабочая тетрадь по немецкому языку."
   },
   {
     id: 146,
     title: "Grammatik mit Sinn und Verstand: Mittel- und Oberstufe",
-    author: "Klett",
+    author: "Wolfgang Rug, Andreas Tomaszewski",
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://m.media-amazon.com/images/P/3126753353.01._SCLZZZZZZZ_.jpg",
     color: "#fab1a0",
+    language: "de",
     description: "Грамматика немецкого языка, Klett (Edition Deutsch)."
   },
   {
@@ -1333,6 +1519,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://covers.openlibrary.org/b/id/997990-L.jpg",
     color: "#fd79a8",
+    language: "ru",
     description: "Жёлтая рабочая тетрадь по немецкому языку, издательство Hueber."
   },
   {
@@ -1342,6 +1529,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "",
     color: "#6c5ce7",
+    language: "ru",
     description: "Оранжевый учебник по немецкому языку, издательство Hueber."
   },
   {
@@ -1351,6 +1539,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://covers.openlibrary.org/b/id/3206421-L.jpg",
     color: "#0984e3",
+    language: "en",
     description: "Учебник английского языка с англо-немецкими списками слов."
   },
   {
@@ -1360,6 +1549,9 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://covers.openlibrary.org/b/id/7820094-L.jpg",
     color: "#00b894",
+    language: "en",
+    series: "Technical English",
+    volume: 3,
     description: "Учебник технического английского, Pearson."
   },
   {
@@ -1369,6 +1561,9 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://m.media-amazon.com/images/P/1292424494.01._SCLZZZZZZZ_.jpg",
     color: "#e17055",
+    language: "en",
+    series: "Technical English",
+    volume: 4,
     description: "Учебник технического английского, Pearson."
   },
   {
@@ -1378,6 +1573,7 @@ const BOOKS = [
     genre: ["Техническая, учебная и справочная литература"],
     cover: "https://covers.openlibrary.org/b/id/7427510-L.jpg",
     color: "#fdcb6e",
+    language: "en",
     description: "Учебник английского языка для инженеров, Cambridge."
   },
 
@@ -1389,6 +1585,7 @@ const BOOKS = [
     genre: ["Детская литература", "Юмор"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/6b/5f/45/6b5f45e4-1862-52dd-136f-ca8d9a0edfd7/9781398511712.jpg/600x600bb.jpg",
     color: "#d63031",
+    language: "en",
     description: "Английское издание. Картинка-книга о суперкартошке и её овощных друзьях."
   },
   {
@@ -1398,6 +1595,8 @@ const BOOKS = [
     genre: ["Детская литература", "Фантастика"],
     cover: "https://m.media-amazon.com/images/P/3473554022.01._SCLZZZZZZZ_.jpg",
     color: "#2d3436",
+    language: "de",
+    series: "tiptoi",
     description: "Немецкая интерактивная книга tiptoi по «Звёздным войнам»."
   },
   {
@@ -1407,6 +1606,8 @@ const BOOKS = [
     genre: ["Детская литература", "Научпоп"],
     cover: "https://m.media-amazon.com/images/P/3473329185.01._SCLZZZZZZZ_.jpg",
     color: "#636e72",
+    language: "de",
+    series: "tiptoi",
     description: "Немецкая интерактивная книга tiptoi про времена года."
   },
   {
@@ -1416,6 +1617,8 @@ const BOOKS = [
     genre: ["Детская литература"],
     cover: "https://covers.openlibrary.org/b/id/9028687-L.jpg",
     color: "#e84393",
+    language: "de",
+    series: "tiptoi",
     description: "Немецкая интерактивная книга tiptoi с рождественскими песнями."
   },
   {
@@ -1425,6 +1628,8 @@ const BOOKS = [
     genre: ["Детская литература", "Научпоп"],
     cover: "https://m.media-amazon.com/images/P/3473329231.01._SCLZZZZZZZ_.jpg",
     color: "#00cec9",
+    language: "de",
+    series: "tiptoi",
     description: "Немецкая интерактивная книга tiptoi о музыке."
   },
   {
@@ -1434,6 +1639,8 @@ const BOOKS = [
     genre: ["Детская литература", "Приключения"],
     cover: "https://m.media-amazon.com/images/P/3473554170.01._SCLZZZZZZZ_.jpg",
     color: "#a29bfe",
+    language: "de",
+    series: "tiptoi create",
     description: "Немецкая интерактивная книга tiptoi create."
   },
   {
@@ -1443,6 +1650,8 @@ const BOOKS = [
     genre: ["Детская литература", "Приключения"],
     cover: "https://m.media-amazon.com/images/P/3473554154.01._SCLZZZZZZZ_.jpg",
     color: "#74b9ff",
+    language: "de",
+    series: "tiptoi create",
     description: "Немецкая интерактивная книга tiptoi create."
   },
   {
@@ -1452,6 +1661,7 @@ const BOOKS = [
     genre: ["Детская литература", "Поэзия"],
     cover: "https://s1.livelib.ru/boocover/1001559269/200x305/d17c/boocover.jpg",
     color: "#fab1a0",
+    language: "ru",
     description: "Тонкая детская книжка в стихах."
   },
   {
@@ -1461,6 +1671,7 @@ const BOOKS = [
     genre: ["Детская литература", "Поэзия", "Сказки и притчи"],
     cover: "https://img1.labirint.ru/books/659112/cover.jpg",
     color: "#fd79a8",
+    language: "ru",
     description: "Сборник стихов и сказок С. Маршака."
   },
   {
@@ -1470,6 +1681,7 @@ const BOOKS = [
     genre: ["Детская литература", "Приключения"],
     cover: "",
     color: "#6c5ce7",
+    language: "ru",
     description: "Детская книга на русском языке. Автора стоит уточнить."
   },
   {
@@ -1479,6 +1691,7 @@ const BOOKS = [
     genre: ["Детская литература", "Сказки и притчи", "Поэзия"],
     cover: "https://img1.labirint.ru/books/570008/cover.jpg",
     color: "#0984e3",
+    language: "ru",
     description: "Сборник сказок Корнея Чуковского."
   },
   {
@@ -1488,6 +1701,7 @@ const BOOKS = [
     genre: ["Детская литература", "Поэзия"],
     cover: "https://img1.labirint.ru/books/852857/cover.jpg",
     color: "#00b894",
+    language: "ru",
     description: "Сборник стихов Агнии Барто."
   },
   {
@@ -1497,6 +1711,7 @@ const BOOKS = [
     genre: ["Детская литература", "Поэзия"],
     cover: "https://img1.labirint.ru/books/697177/cover.jpg",
     color: "#e17055",
+    language: "ru",
     description: "Детская книга Леонида Яхнина, издательство «Махаон»."
   },
   {
@@ -1506,6 +1721,7 @@ const BOOKS = [
     genre: ["Детская литература", "Приключения"],
     cover: "https://img1.labirint.ru/books/910788/cover.jpg",
     color: "#fdcb6e",
+    language: "ru",
     description: "Детская повесть Яна Экхольма, издательство «Махаон»."
   },
   {
@@ -1515,6 +1731,7 @@ const BOOKS = [
     genre: ["Детская литература", "Сказки и притчи"],
     cover: "https://img1.labirint.ru/books/912067/cover.jpg",
     color: "#d63031",
+    language: "ru",
     description: "Книга о Муми-троллях для малышей, издательство «Росмэн»."
   },
   {
@@ -1524,6 +1741,8 @@ const BOOKS = [
     genre: ["Детская литература", "Приключения"],
     cover: "https://s1.livelib.ru/boocover/1002875343/200x305/845e/boocover.jpg",
     color: "#2d3436",
+    language: "ru",
+    series: "Сэр Периметр",
     description: "Математическая приключенческая книга серии «Сэр Периметр»."
   },
   {
@@ -1533,6 +1752,8 @@ const BOOKS = [
     genre: ["Детская литература", "Приключения"],
     cover: "https://s1.livelib.ru/boocover/1003513314/200x305/5a87/boocover.jpg",
     color: "#636e72",
+    language: "ru",
+    series: "Сэр Периметр",
     description: "Математическая приключенческая книга серии «Сэр Периметр»."
   },
   {
@@ -1542,6 +1763,8 @@ const BOOKS = [
     genre: ["Детская литература", "Приключения"],
     cover: "https://s1.livelib.ru/boocover/1002909994/200x305/4214/boocover.jpg",
     color: "#e84393",
+    language: "ru",
+    series: "Сэр Периметр",
     description: "Математическая приключенческая книга серии «Сэр Периметр»."
   },
   {
@@ -1551,6 +1774,7 @@ const BOOKS = [
     genre: ["Детская литература", "Научпоп"],
     cover: "https://s1.livelib.ru/boocover/1010167015/200x305/261f/boocover.jpg",
     color: "#00cec9",
+    language: "ru",
     description: "Детская научно-популярная книга о бактериях."
   },
   {
@@ -1560,6 +1784,9 @@ const BOOKS = [
     genre: ["Детская литература", "Приключения"],
     cover: "https://img1.labirint.ru/books/734332/cover.jpg",
     color: "#a29bfe",
+    language: "ru",
+    series: "Sonic. Комикс",
+    volume: 2,
     description: "Комикс о Сонике, издательство «Эксмо»."
   },
   {
@@ -1569,6 +1796,9 @@ const BOOKS = [
     genre: ["Детская литература", "Приключения"],
     cover: "https://img1.labirint.ru/books/746826/cover.jpg",
     color: "#74b9ff",
+    language: "ru",
+    series: "Sonic. Комикс",
+    volume: 4,
     description: "Комикс о Сонике, издательство «Эксмо»."
   },
   {
@@ -1578,6 +1808,7 @@ const BOOKS = [
     genre: ["Детская литература"],
     cover: "https://img1.labirint.ru/books/573045/cover.jpg",
     color: "#fab1a0",
+    language: "ru",
     description: "Детская книга Чисато Таширо."
   },
   {
@@ -1587,6 +1818,7 @@ const BOOKS = [
     genre: ["Детская литература"],
     cover: "https://s1.livelib.ru/boocover/1008373327/200x305/f885/boocover.jpg",
     color: "#fd79a8",
+    language: "ru",
     description: "Детская книга о динозаврах."
   },
   {
@@ -1596,6 +1828,7 @@ const BOOKS = [
     genre: ["Детская литература"],
     cover: "https://s1.livelib.ru/boocover/1007664373/200x305/cede/boocover.jpg",
     color: "#6c5ce7",
+    language: "ru",
     description: "Детская книга о динозаврах."
   },
   {
@@ -1605,6 +1838,7 @@ const BOOKS = [
     genre: ["Детская литература"],
     cover: "",
     color: "#0984e3",
+    language: "ru",
     description: "Название на корешке разобрано частично — стоит уточнить."
   },
 
@@ -1616,6 +1850,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://covers.openlibrary.org/b/id/12706822-L.jpg",
     color: "#a29bfe",
+    language: "de",
     description: "Немецкое издание (KiWi 319). Роман Ремарка о молодых солдатах Первой мировой войны."
   },
   {
@@ -1625,6 +1860,7 @@ const BOOKS = [
     genre: ["Публицистика"],
     cover: "https://s1.livelib.ru/boocover/1010036536/200x305/3b2e/boocover.jpg",
     color: "#74b9ff",
+    language: "ru",
     description: "Публицистические заметки Дмитрия Глуховского о России при Путине с 2012 года до войны в Украине (2024)."
   },
   {
@@ -1634,6 +1870,7 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/ef/de/e6/efdee688-8ae8-9404-0090-87471074d03f/9785001398035.jpg/600x600bb.jpg",
     color: "#fab1a0",
+    language: "ru",
     description: "Научно-популярная книга Алексея Семихатова, издательство АНФ."
   },
   {
@@ -1643,6 +1880,7 @@ const BOOKS = [
     genre: ["Научпоп", "Юмор"],
     cover: "https://covers.openlibrary.org/b/id/8781053-L.jpg",
     color: "#fd79a8",
+    language: "ru",
     description: "Русское издание книги Рэндалла Манро «How To»: абсурдные научные советы для повседневных проблем."
   },
   {
@@ -1652,6 +1890,7 @@ const BOOKS = [
     genre: ["Научпоп"],
     cover: "https://img1.labirint.ru/books/509871/cover.jpg",
     color: "#6c5ce7",
+    language: "ru",
     description: "Научно-популярная книга Якова Перельмана, издательство Бомбора."
   },
   {
@@ -1661,6 +1900,7 @@ const BOOKS = [
     genre: ["Классика", "Приключения"],
     cover: "https://img1.labirint.ru/books/786953/cover.jpg",
     color: "#0984e3",
+    language: "ru",
     description: "Роман Жюля Верна о кругосветном пари Филеаса Фогга."
   },
 
@@ -1672,6 +1912,7 @@ const BOOKS = [
     genre: ["Современная проза", "Детектив и триллер"],
     cover: "https://img1.labirint.ru/books/323097/cover.jpg",
     color: "#00b894",
+    language: "ru",
     description: "Роман Умберто Эко о трёх миланских редакторах, которые ради игры выдумывают всемирный заговор тамплиеров."
   },
   {
@@ -1681,6 +1922,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://img1.labirint.ru/books/863341/cover.jpg",
     color: "#e17055",
+    language: "ru",
     description: "Роман Ивана Гончарова о добром и бездеятельном помещике Илье Обломове, серия «Мировая классика»."
   },
 
@@ -1692,6 +1934,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://s1.livelib.ru/boocover/1018166041/200x305/60da/boocover.jpg",
     color: "#fdcb6e",
+    language: "be",
     description: "Белорусское издание. Повесть Василя Быкова о бежавших из концлагеря советском пленном и итальянке, Папуры."
   },
   {
@@ -1701,6 +1944,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://img1.labirint.ru/books/988360/cover.jpg",
     color: "#d63031",
+    language: "ru",
     description: "Сборник рассказов и повестей Антона Чехова, Эксмо, серия «Магистраль. Главный тренд».",
     contents: ["Драма на охоте", "Спать хочется", "Именины", "Дуэль", "Анна на шее", "Дом с мезонином", "Душечка", "Дама с собачкой"]
   },
@@ -1711,6 +1955,7 @@ const BOOKS = [
     genre: ["Классика"],
     cover: "https://img1.labirint.ru/books/807916/cover.jpg",
     color: "#2d3436",
+    language: "ru",
     description: "Сборник повестей и рассказов Николая Лескова, АСТ, серия «Русская классика».",
     contents: ["Леди Макбет Мценского уезда", "Воительница", "Житие одной бабы"]
   },
@@ -1721,6 +1966,7 @@ const BOOKS = [
     genre: ["Публицистика", "История"],
     cover: "https://s1.livelib.ru/boocover/1012692775/200x305/8f96/boocover.jpg",
     color: "#636e72",
+    language: "ru",
     description: "Книга экономиста и политолога о том, как современные авторитарные режимы удерживают власть через манипуляцию информацией, а не массовые репрессии."
   }
 ];
