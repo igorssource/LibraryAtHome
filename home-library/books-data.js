@@ -1,6 +1,6 @@
 // Список книг для домашней библиотеки.
 // Чтобы добавить книгу — скопируйте один объект и измените поля.
-// Поле "cover" — ссылка на обложку в интернете (например с covers.openlibrary.org).
+// Поле "cover" — ссылка на обложку в интернете (например с img1.labirint.ru или m.media-amazon.com).
 // Если ссылки нет, поле пустое или картинка не загрузилась, будет показана цветная заглушка со значком книги.
 // Поле "genre" — список жанров, можно указать несколько: genre: ["Классика", "Поэзия"].
 // Использовать только жанры из списка GENRES ниже. Если жанр неизвестен — genre: [].
@@ -80,7 +80,7 @@ const BOOKS = [
     title: "Маленькие женщины",
     author: "Луиза Мэй Олкотт",
     genre: ["Классика"],
-    cover: "https://covers.openlibrary.org/b/id/8775559-L.jpg",
+    cover: "https://img1.labirint.ru/books/626375/cover.jpg",
     color: "#fab1a0",
     language: "ru",
     description: "Классический роман о взрослении четырёх сестёр Марч в Америке XIX века."
@@ -90,7 +90,7 @@ const BOOKS = [
     title: "A Woman Is No Man",
     author: "Etaf Rum",
     genre: ["Современная проза"],
-    cover: "https://covers.openlibrary.org/b/id/8797803-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication123/v4/0f/49/3a/0f493ad8-7f0e-3242-d640-76c70e036fba/9780008341077.jpg/600x600bb.jpg",
     color: "#d63031",
     language: "en",
     description: "Английское издание. Роман о трёх поколениях палестино-американских женщин и борьбе за собственный голос."
@@ -100,7 +100,7 @@ const BOOKS = [
     title: "Самый богатый человек в Вавилоне",
     author: "Джордж Сэмюэл Клейсон",
     genre: ["Финансы и бизнес", "Сказки и притчи"],
-    cover: "https://covers.openlibrary.org/b/id/10491331-L.jpg",
+    cover: "https://img1.labirint.ru/books/742439/cover.jpg",
     color: "#e17055",
     language: "ru",
     description: "Классическая книга о финансовой грамотности в форме притч о древнем Вавилоне."
@@ -110,7 +110,7 @@ const BOOKS = [
     title: "American Wife",
     author: "Curtis Sittenfeld",
     genre: ["Современная проза"],
-    cover: "https://covers.openlibrary.org/b/id/5934583-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication113/v4/87/05/5a/87055ab0-e689-971f-654c-405fc2b5dbd8/9781446497814.jpg/600x600bb.jpg",
     color: "#dfe6e9",
     language: "en",
     description: "Английское издание. Роман, вдохновлённый жизнью первой леди США."
@@ -141,7 +141,7 @@ const BOOKS = [
     title: "The Bridges of Madison County",
     author: "Robert James Waller",
     genre: ["Любовный роман"],
-    cover: "https://covers.openlibrary.org/b/id/490280-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication4/v4/24/ff/b7/24ffb791-aec7-3c52-c6e8-c86a664b3573/9780759521728.jpg/600x600bb.jpg",
     color: "#fdcb6e",
     language: "en",
     description: "Английское издание. Короткий роман о четырёхдневном романе фотографа и замужней женщины в Айове."
@@ -161,7 +161,7 @@ const BOOKS = [
     title: "Евгений Онегин (Поэмы)",
     author: "Александр Пушкин",
     genre: ["Классика", "Поэзия"],
-    cover: "https://covers.openlibrary.org/b/id/8231991-L.jpg",
+    cover: "https://img1.labirint.ru/books/810440/cover.jpg",
     color: "#636e72",
     language: "ru",
     description: "Классика русской литературы — роман в стихах."
@@ -181,7 +181,7 @@ const BOOKS = [
     title: "The Fair Botanists",
     author: "Sara Sheridan",
     genre: ["Исторический роман"],
-    cover: "https://covers.openlibrary.org/b/id/12407157-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/ab/1b/9d/ab1b9dec-189a-d8aa-5398-95dc7410baaa/9781529336238.jpg/600x600bb.jpg",
     color: "#00b894",
     language: "en",
     description: "Английское издание. Исторический роман о ботаническом саде Эдинбурга начала XIX века."
@@ -191,7 +191,7 @@ const BOOKS = [
     title: "Lolita",
     author: "Vladimir Nabokov",
     genre: ["Классика"],
-    cover: "https://covers.openlibrary.org/b/id/12984540-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/3f/95/d6/3f95d63e-5c0f-87bd-c9aa-5f717f428c8f/Hum-Books-Cover.jpg/600x600bb.jpg",
     color: "#fd79a8",
     language: "en",
     description: "Английское издание романа Владимира Набокова."
@@ -211,7 +211,7 @@ const BOOKS = [
     title: "Метель",
     author: "Владимир Сорокин",
     genre: ["Современная проза", "Фантастика"],
-    cover: "https://covers.openlibrary.org/b/id/10305046-L.jpg",
+    cover: "https://img1.labirint.ru/books/656132/cover.jpg",
     color: "#dfe6e9",
     language: "ru",
     description: "Повесть Владимира Сорокина о докторе, пытающемся добраться до заражённой деревни сквозь метель."
@@ -231,7 +231,7 @@ const BOOKS = [
     title: "Тёмный лес",
     author: "Лю Цысинь",
     genre: ["Фантастика"],
-    cover: "https://covers.openlibrary.org/b/id/10526598-L.jpg",
+    cover: "https://img1.labirint.ru/books/1004307/cover.jpg",
     color: "#0984e3",
     language: "ru",
     series: "Задача трёх тел",
@@ -336,7 +336,7 @@ const BOOKS = [
     title: "Percy Jackson: Der Fluch des Titanen",
     author: "Rick Riordan",
     genre: ["Детская литература", "Фэнтези"],
-    cover: "https://covers.openlibrary.org/b/id/14601475-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/e8/27/58/e82758ad-8b84-dfbf-d8e4-481126f0f498/9783646920024.jpg/600x600bb.jpg",
     color: "#00cec9",
     language: "de",
     series: "Percy Jackson",
@@ -348,7 +348,7 @@ const BOOKS = [
     title: "The 78-Storey Treehouse",
     author: "Andy Griffiths, Terry Denton",
     genre: ["Детская литература", "Юмор", "Приключения"],
-    cover: "https://covers.openlibrary.org/b/id/9367879-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication124/v4/11/76/97/117697aa-bb5f-df34-5535-a57f6290e0a9/9781509833764.jpg/600x600bb.jpg",
     color: "#74b9ff",
     language: "en",
     series: "Treehouse",
@@ -370,7 +370,7 @@ const BOOKS = [
     title: "Гарри Поттер и узник Азкабана",
     author: "Дж. К. Роулинг",
     genre: ["Детская литература", "Фэнтези"],
-    cover: "https://covers.openlibrary.org/b/id/10580435-L.jpg",
+    cover: "https://img1.labirint.ru/books/445211/cover.jpg",
     color: "#fdcb6e",
     language: "ru",
     series: "Гарри Поттер",
@@ -1019,7 +1019,7 @@ const BOOKS = [
     title: "Storia della bambina perduta",
     author: "Elena Ferrante",
     genre: ["Современная проза"],
-    cover: "https://covers.openlibrary.org/b/id/7376568-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/91/94/aa/9194aa00-c0a2-ad04-cc5c-5fd3c6536fe6/9788866325888.jpg/600x600bb.jpg",
     color: "#636e72",
     language: "it",
     series: "L'amica geniale",
@@ -1031,7 +1031,7 @@ const BOOKS = [
     title: "Randagi",
     author: "Marco Amerighi",
     genre: ["Современная проза"],
-    cover: "https://covers.openlibrary.org/b/id/13233202-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/98/24/72/9824724d-4ebb-10cc-28a0-26047c70f813/9788833937373.jpg/600x600bb.jpg",
     color: "#e84393",
     language: "it",
     description: "Итальянское издание, издательство Bollati Boringhieri."
@@ -1051,7 +1051,7 @@ const BOOKS = [
     title: "Jane Austen at Home",
     author: "Lucy Worsley",
     genre: ["Биография и мемуары"],
-    cover: "https://covers.openlibrary.org/b/id/8046516-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/ff/aa/47/ffaa473f-7162-c353-13c0-637edec2bf51/9781473632219.jpg/600x600bb.jpg",
     color: "#a29bfe",
     language: "en",
     description: "Английское издание. Биография Джейн Остин."
@@ -1061,7 +1061,7 @@ const BOOKS = [
     title: "New York",
     author: "Edward Rutherfurd",
     genre: ["Исторический роман"],
-    cover: "https://covers.openlibrary.org/b/id/10427361-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/83/91/06/83910659-db12-3875-6b63-d00c8bc29d2a/9781409007692.jpg/600x600bb.jpg",
     color: "#74b9ff",
     language: "en",
     description: "Английское издание. Исторический роман о Нью-Йорке."
@@ -1071,7 +1071,7 @@ const BOOKS = [
     title: "North Woods",
     author: "Daniel Mason",
     genre: ["Современная проза", "Исторический роман"],
-    cover: "https://covers.openlibrary.org/b/id/14421778-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/3f/78/24/3f782477-1355-4dc7-a5e6-f5ace243fb95/9781399809313.jpg/600x600bb.jpg",
     color: "#fab1a0",
     language: "en",
     description: "Английское издание. Роман об одном доме и его обитателях на протяжении веков."
@@ -1205,7 +1205,7 @@ const BOOKS = [
     title: "Das große Buch vom Marathon",
     author: "Hubert Beck",
     genre: ["Здоровье и спорт"],
-    cover: "https://covers.openlibrary.org/b/id/8903210-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication115/v4/1e/24/cb/1e24cb28-545b-a69f-d304-a620579b83f2/1034456747.jpg/600x600bb.jpg",
     color: "#74b9ff",
     language: "de",
     description: "Немецкое издание. Большая книга о марафоне."
@@ -1319,7 +1319,7 @@ const BOOKS = [
     title: "What Great Paintings Say",
     author: "Rose-Marie Hagen, Rainer Hagen",
     genre: ["Искусство и мода"],
-    cover: "https://covers.openlibrary.org/b/id/1030588-L.jpg",
+    cover: "https://m.media-amazon.com/images/P/3836559269.01._SCLZZZZZZZ_.jpg",
     color: "#e84393",
     language: "en",
     description: "Английское издание, TASCHEN (Bibliotheca Universalis)."
@@ -1407,7 +1407,7 @@ const BOOKS = [
     title: "Repetitorium der Höheren Mathematik",
     author: "Merziger, Wirth",
     genre: ["Техническая, учебная и справочная литература"],
-    cover: "https://covers.openlibrary.org/b/id/8714917-L.jpg",
+    cover: "https://m.media-amazon.com/images/P/3923923333.01._SCLZZZZZZZ_.jpg",
     color: "#00b894",
     language: "de",
     description: "Немецкий учебник по высшей математике."
@@ -1457,7 +1457,7 @@ const BOOKS = [
     title: "Play Acoustic",
     author: "Dave Hunter",
     genre: ["Техническая, учебная и справочная литература"],
-    cover: "https://covers.openlibrary.org/b/id/1633655-L.jpg",
+    cover: "https://m.media-amazon.com/images/P/3802406095.01._SCLZZZZZZZ_.jpg",
     color: "#636e72",
     language: "de",
     description: "Немецкое издание (Voggenreiter). Учебник игры на акустической гитаре."
@@ -1547,7 +1547,7 @@ const BOOKS = [
     title: "Technical English 3: Course Book",
     author: "Bonamy",
     genre: ["Техническая, учебная и справочная литература"],
-    cover: "https://covers.openlibrary.org/b/id/7820094-L.jpg",
+    cover: "https://m.media-amazon.com/images/P/1292424486.01._SCLZZZZZZZ_.jpg",
     color: "#00b894",
     language: "en",
     series: "Technical English",
@@ -1571,7 +1571,7 @@ const BOOKS = [
     title: "Cambridge English for Engineering",
     author: "Mark Ibbotson",
     genre: ["Техническая, учебная и справочная литература"],
-    cover: "https://covers.openlibrary.org/b/id/7427510-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication6/v4/5e/cf/af/5ecfafef-d1d9-0a2c-33d4-d89de6f8ed6c/En_for_Eng_cover.jpg/600x600bb.jpg",
     color: "#fdcb6e",
     language: "en",
     description: "Учебник английского языка для инженеров, Cambridge."
@@ -1848,7 +1848,7 @@ const BOOKS = [
     title: "Im Westen nichts Neues",
     author: "Erich Maria Remarque",
     genre: ["Классика"],
-    cover: "https://covers.openlibrary.org/b/id/12706822-L.jpg",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/66/d9/19/66d919ba-4571-9afb-faf3-abb0483b8152/1019012598.jpg/600x600bb.jpg",
     color: "#a29bfe",
     language: "de",
     description: "Немецкое издание (KiWi 319). Роман Ремарка о молодых солдатах Первой мировой войны."
