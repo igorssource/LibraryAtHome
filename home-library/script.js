@@ -5,6 +5,23 @@ const TRANSLIT_MAP = {
   ч: "ch", ш: "sh", щ: "sch", ъ: "", ы: "y", ь: "", э: "e", ю: "yu", я: "ya"
 };
 
+// Названия языков для фильтра (поле language в books-data.js)
+const LANGUAGES = {
+  ru: "Русский",
+  de: "Немецкий",
+  en: "Английский",
+  it: "Итальянский",
+  be: "Белорусский",
+  zh: "Китайский"
+};
+
+const SORTS = {
+  added: "По порядку добавления",
+  newest: "Сначала новые",
+  title: "По названию",
+  author: "По автору"
+};
+
 function toTranslit(str) {
   return str
     .toLowerCase()
@@ -18,16 +35,42 @@ function normalize(str) {
   return str.toLowerCase().replace(/ё/g, "е");
 }
 
+// 1 книга, 2 книги, 5 книг
+function plural(n, one, few, many) {
+  const n10 = n % 10;
+  const n100 = n % 100;
+  if (n10 === 1 && n100 !== 11) return one;
+  if (n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14)) return few;
+  return many;
+}
+
+// Ключ сортировки: тома одной серии идут подряд и по номеру
+function seriesKey(book) {
+  if (!book.series) return normalize(book.title);
+  const volume = String(book.volume || 0).padStart(4, "0");
+  return normalize(book.series) + " " + volume;
+}
+
+// Сортировка по автору: по фамилии первого автора; «автор не указан» и «разные авторы» — в конце
+function authorKey(author) {
+  const a = normalize(author);
+  if (a.startsWith("автор не указан") || a.startsWith("разные авторы")) return "\uffff";
+  const first = a.split(",")[0].replace(/\(hrsg\.\)|u\. a\./g, "").trim();
+  const words = first.split(/\s+/);
+  return words[words.length - 1] + " " + first;
+}
+
+function showPlaceholder(cover, book) {
+  cover.style.background = book.color || "#999";
+  const placeholder = document.createElement("span");
+  placeholder.className = "cover-placeholder";
+  placeholder.textContent = "📖";
+  cover.prepend(placeholder);
+}
+
 function createBookCard(book) {
   const card = document.createElement("article");
   card.className = "book-card";
-  card.dataset.title = normalize(book.title);
-  card.dataset.author = normalize(book.author);
-  card.dataset.titleTranslit = toTranslit(book.title);
-  card.dataset.authorTranslit = toTranslit(book.author);
-  card.dataset.genres = (book.genre || []).join("|");
-  // Произведения сборника: ищем по ним и показываем, что именно нашлось
-  card.dataset.contents = (book.contents || []).join("|");
 
   const cover = document.createElement("div");
   cover.className = "book-cover";
@@ -36,10 +79,16 @@ function createBookCard(book) {
     const img = document.createElement("img");
     img.src = book.cover;
     img.alt = `Обложка книги «${book.title}»`;
+    img.loading = "lazy";
+    img.decoding = "async";
+    // ссылка умерла или сайт запретил показ: вместо пустого места — цветная заглушка
+    img.addEventListener("error", () => {
+      img.remove();
+      showPlaceholder(cover, book);
+    });
     cover.appendChild(img);
   } else {
-    cover.style.background = book.color || "#999";
-    cover.textContent = "📖";
+    showPlaceholder(cover, book);
   }
 
   const isCollection = (book.contents || []).length > 0;
@@ -55,6 +104,12 @@ function createBookCard(book) {
   const descText = document.createElement("p");
   descText.textContent = book.description || "Описание пока не добавлено.";
   description.appendChild(descText);
+  if (book.series) {
+    const series = document.createElement("p");
+    series.className = "book-series";
+    series.textContent = `Серия: ${book.series}` + (book.volume ? `, том ${book.volume}` : "");
+    description.appendChild(series);
+  }
   if (isCollection) {
     const contentsTitle = document.createElement("p");
     contentsTitle.className = "book-contents-title";
@@ -86,74 +141,126 @@ function createBookCard(book) {
   found.className = "book-found";
   found.hidden = true;
 
-  info.appendChild(title);
-  info.appendChild(author);
-  info.appendChild(found);
-
-  card.appendChild(cover);
-  card.appendChild(info);
-
-  return card;
+  info.append(title, author, found);
+  card.append(cover, info);
+  return { card, found };
 }
 
-function renderBooks(books) {
+function setupLibrary() {
   const grid = document.getElementById("book-grid");
-  books.forEach((book) => {
-    grid.appendChild(createBookCard(book));
-  });
-}
-
-function setupFilters() {
   const input = document.getElementById("search-input");
-  const noResults = document.getElementById("no-results");
+  const counter = document.getElementById("result-count");
+  const languageSelect = document.getElementById("language-select");
+  const sortSelect = document.getElementById("sort-select");
   const genreButton = document.getElementById("genre-button");
   const genreLabel = document.getElementById("genre-button-label");
   const genrePanel = document.getElementById("genre-panel");
   const genreList = document.getElementById("genre-list");
   const genreReset = document.getElementById("genre-reset");
-  const cards = Array.from(document.querySelectorAll(".book-card"));
   const selectedGenres = new Set();
 
+  // Для каждой книги заранее готовим строки поиска
+  const entries = BOOKS.map((book, index) => {
+    const { card, found } = createBookCard(book);
+    grid.appendChild(card);
+    const main = [book.title, book.author, book.series || ""];
+    return {
+      book,
+      card,
+      found,
+      index,
+      text: main.map(normalize),
+      translit: main.map(toTranslit),
+      works: book.contents || [],
+      genres: book.genre || []
+    };
+  });
+
+  // ---- язык и сортировка ----
+  const langCounts = {};
+  BOOKS.forEach((b) => {
+    if (b.language) langCounts[b.language] = (langCounts[b.language] || 0) + 1;
+  });
+  languageSelect.add(new Option("Все языки", ""));
+  Object.keys(langCounts)
+    .sort((a, b) => langCounts[b] - langCounts[a])
+    .forEach((code) => {
+      languageSelect.add(new Option(`${LANGUAGES[code] || code} (${langCounts[code]})`, code));
+    });
+
+  Object.entries(SORTS).forEach(([value, label]) => sortSelect.add(new Option(label, value)));
+
+  function sortEntries() {
+    const sort = sortSelect.value;
+    const sorted = entries.slice();
+    const cmp = (a, b) => a.localeCompare(b, "ru");
+    if (sort === "newest") sorted.sort((a, b) => b.index - a.index);
+    if (sort === "title") sorted.sort((a, b) => cmp(seriesKey(a.book), seriesKey(b.book)));
+    if (sort === "author") {
+      sorted.sort(
+        (a, b) =>
+          cmp(authorKey(a.book.author), authorKey(b.book.author)) ||
+          cmp(seriesKey(a.book), seriesKey(b.book))
+      );
+    }
+    grid.append(...sorted.map((e) => e.card));
+  }
+
+  // ---- поиск и фильтры ----
   function applyFilters() {
     const query = normalize(input.value.trim());
     const translitQuery = toTranslit(query);
+    const language = languageSelect.value;
     let visibleCount = 0;
 
-    cards.forEach((card) => {
+    entries.forEach((e) => {
       const matchesMain =
-        card.dataset.title.includes(query) ||
-        card.dataset.author.includes(query) ||
-        card.dataset.titleTranslit.includes(translitQuery) ||
-        card.dataset.authorTranslit.includes(translitQuery);
+        e.text.some((s) => s.includes(query)) || e.translit.some((s) => s.includes(translitQuery));
 
-      const works = card.dataset.contents ? card.dataset.contents.split("|") : [];
       const foundWorks = query
-        ? works.filter(
-            (w) => normalize(w).includes(query) || toTranslit(w).includes(translitQuery)
-          )
+        ? e.works.filter((w) => normalize(w).includes(query) || toTranslit(w).includes(translitQuery))
         : [];
       const matchesText = matchesMain || foundWorks.length > 0;
 
-      const found = card.querySelector(".book-found");
       const showFound = !matchesMain && foundWorks.length > 0;
-      found.hidden = !showFound;
-      found.textContent = showFound ? `Найдено: ${foundWorks.join(", ")}` : "";
+      e.found.hidden = !showFound;
+      e.found.textContent = showFound ? `Найдено: ${foundWorks.join(", ")}` : "";
 
       // Выбранные жанры сочетаются через «ИЛИ»: достаточно любого из выбранных
-      const bookGenres = card.dataset.genres.split("|");
       const matchesGenre =
-        selectedGenres.size === 0 ||
-        Array.from(selectedGenres).some((g) => bookGenres.includes(g));
+        selectedGenres.size === 0 || Array.from(selectedGenres).some((g) => e.genres.includes(g));
+      const matchesLanguage = !language || e.book.language === language;
 
-      const visible = matchesText && matchesGenre;
-      card.hidden = !visible;
+      const visible = matchesText && matchesGenre && matchesLanguage;
+      e.card.hidden = !visible;
       if (visible) visibleCount++;
     });
 
-    noResults.hidden = visibleCount > 0;
+    const total = entries.length;
+    if (visibleCount === 0) counter.textContent = "Ничего не найдено";
+    else if (visibleCount === total) counter.textContent = `${total} ${plural(total, "книга", "книги", "книг")}`;
+    else counter.textContent = `Найдено ${visibleCount} из ${total}`;
+
+    saveToUrl();
   }
 
-  // Меню жанров: только те, что реально есть у книг, в порядке списка GENRES
+  // ---- состояние в адресе страницы: ?q=чехов&lang=de&genre=Классика&sort=author ----
+  function saveToUrl() {
+    const params = new URLSearchParams();
+    if (input.value.trim()) params.set("q", input.value.trim());
+    if (languageSelect.value) params.set("lang", languageSelect.value);
+    selectedGenres.forEach((g) => params.append("genre", g));
+    if (sortSelect.value !== "added") params.set("sort", sortSelect.value);
+    const query = params.toString();
+    history.replaceState(null, "", query ? `?${query}` : location.pathname);
+  }
+
+  const startParams = new URLSearchParams(location.search);
+  input.value = startParams.get("q") || "";
+  if (langCounts[startParams.get("lang")]) languageSelect.value = startParams.get("lang");
+  if (SORTS[startParams.get("sort")]) sortSelect.value = startParams.get("sort");
+
+  // ---- меню жанров: только те, что реально есть у книг, в порядке списка GENRES ----
   const counts = {};
   BOOKS.forEach((book) => {
     (book.genre || []).forEach((g) => {
@@ -170,6 +277,7 @@ function setupFilters() {
     genreReset.disabled = n === 0;
   }
 
+  const startGenres = startParams.getAll("genre");
   GENRES.filter((g) => counts[g]).forEach((genre) => {
     const row = document.createElement("label");
     row.className = "genre-option";
@@ -177,6 +285,10 @@ function setupFilters() {
     const box = document.createElement("input");
     box.type = "checkbox";
     box.value = genre;
+    if (startGenres.includes(genre)) {
+      box.checked = true;
+      selectedGenres.add(genre);
+    }
     box.addEventListener("change", () => {
       if (box.checked) selectedGenres.add(genre);
       else selectedGenres.delete(genre);
@@ -223,7 +335,15 @@ function setupFilters() {
   });
 
   input.addEventListener("input", applyFilters);
+  languageSelect.addEventListener("change", applyFilters);
+  sortSelect.addEventListener("change", () => {
+    sortEntries();
+    saveToUrl();
+  });
+
   refreshGenreButton();
+  sortEntries();
+  applyFilters();
 }
 
 // На устройствах без мыши (телефон, планшет) описание открывается нажатием на обложку
@@ -240,6 +360,5 @@ function setupTouchDescriptions() {
   });
 }
 
-renderBooks(BOOKS);
-setupFilters();
+setupLibrary();
 setupTouchDescriptions();

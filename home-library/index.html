@@ -32,10 +32,13 @@
         <div id="genre-list" class="genre-list"></div>
       </div>
     </div>
+
+    <select id="language-select" class="control-select" aria-label="Язык книги"></select>
+    <select id="sort-select" class="control-select" aria-label="Сортировка"></select>
   </div>
 </header>
 
-<p id="no-results" class="no-results" hidden>Ничего не найдено</p>
+<p id="result-count" class="result-count" aria-live="polite"></p>
 
 <main id="book-grid" class="book-grid">
   <!-- Карточки книг добавляются скриптом из books-data.js -->
