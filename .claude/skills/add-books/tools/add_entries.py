@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """add_entries.py - fügt neue Bücher in home-library/books-data.js ein.
 
-Python-Version von scripts/add-entries.ps1 (für Cloud-Sitzungen unter Linux; nur Standardbibliothek).
+Nur Standardbibliothek; läuft in der Cloud-Sitzung (python3) und unter Windows mit installiertem Python.
 
 Eingabedatei (UTF-8), eine Zeile pro Buch:   Titel|Autor|Genre1;Genre2|Beschreibung[|Werk1;Werk2;...]
   - fünftes Feld nur bei Sammelbänden: Werke laut Inhaltsverzeichnis (wird zu contents: [...])

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """find_covers.py - automatische Suche nach Covern (und fehlenden Autoren) für Bücher in books-data.js.
 
-Python-Version von scripts/find-covers.ps1 (für Cloud-Sitzungen unter Linux; nur Standardbibliothek).
+Nur Standardbibliothek; läuft in der Cloud-Sitzung (python3) und unter Windows mit installiertem Python.
 
 Reihenfolge der Quellen (Begründung: references/cover-sources.md):
   Kyrillisch (Titel oder Autor): Labirint -> LiveLib -> Open Library -> Apple Books

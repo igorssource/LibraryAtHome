@@ -11,7 +11,7 @@
 ## Структура
 
 - `home-library/`: сайт (`index.html`, `style.css`, `script.js`) и данные (`books-data.js`: список жанров `GENRES` и книги `BOOKS`). Сайт читает данные сам, код менять для новых книг не нужно.
-- `.claude/skills/add-books/`: рутина добавления книг. `SKILL.md` (шаги), `references/cover-sources.md` (где искать обложки), `scripts/` (PowerShell для Windows), `tools/` (Python для облака и Linux).
+- `.claude/skills/add-books/`: рутина добавления книг. `SKILL.md` (шаги), `references/cover-sources.md` (где искать обложки), `tools/` (скрипты на Python).
 - `.github/workflows/`: `pages.yml` публикует `home-library/` на GitHub Pages, `auto-merge-claude.yml` переносит ветки `claude/**` и `ccr-**` в `main`, если изменены только файлы в `home-library/`.
 
 ## Правила данных
@@ -24,7 +24,7 @@
 
 ## Среды
 
-- Windows на компьютере пользователя: PowerShell-скрипты в `scripts/`, предпросмотр через `.claude/launch.json`.
+- Основная среда — облачная сессия. PowerShell-версия для Windows удалена (есть в истории git); на Windows нужен Python, скрипты те же.
 - Облачная сессия Claude Code (с телефона): `python3` и скрипты из `tools/`, публикация через `git push` в ветку сессии. Изменения только в `home-library/` workflow переносит в `main` сам; если он этого не сделал, Claude создаёт pull request в `main` и сразу сливает его без вопросов, когда проверки пройдены (подробно: шаг 9 скилла `add-books`).
 
 ## Безопасность (репозиторий публичный)
