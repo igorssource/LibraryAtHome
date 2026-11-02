@@ -1,13 +1,13 @@
 name: Claude-Zweige nach main übernehmen
 
-# Cloud-Sitzungen von Claude Code (Telefon) schreiben auf Zweige claude/....
+# Cloud-Sitzungen von Claude Code (Telefon) schreiben auf Zweige claude/... oder ccr-....
 # Dieser Workflow übernimmt einen solchen Zweig automatisch nach main, aber NUR wenn
 #   1. alle geänderten Dateien unter home-library/ liegen (Bücherliste, Seite) und
 #   2. die Prüfung der Daten (ohne Netzwerk) besteht.
 # Änderungen an Regeln, Skripten oder Workflows bleiben auf dem Zweig und brauchen deine Freigabe.
 on:
   push:
-    branches: ["claude/**"]
+    branches: ["claude/**", "ccr-**"]
 
 permissions:
   contents: write

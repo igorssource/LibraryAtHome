@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """check_site.py - prüft home-library/books-data.js und die Cover-Links ohne Browser.
 
-Prüft: doppelte ids/Titel, Genres außerhalb von GENRES, leere Genres, Feld contents (Sammelbände), und ob jeder Cover-Link ein Bild liefert
+Prüft: doppelte ids/Titel, Genres außerhalb von GENRES, leere Genres, Feld contents (Sammelbände),
+Sprache (language aus der Liste LANGUAGES in script.js), Serien (volume ganze Zahl, nur mit series), und ob jeder Cover-Link ein Bild liefert
 (mit Referer der Seite, um Hotlink-Schutz zu erkennen). Rückgabecode 1, wenn etwas auffällt.
 
 Beispiel:  python3 check_site.py
@@ -52,10 +53,28 @@ def main():
     titles = [b["title"].lower() for b in books]
     problems += ["doppelte id: %d" % i for i in sorted(set(x for x in ids if ids.count(x) > 1))]
     problems += ["doppelter Titel: " + t for t in sorted(set(x for x in titles if titles.count(x) > 1))]
+    # Sprachen, die die Seite kennt (LANGUAGES in script.js)
+    langs = []
+    script = os.path.join(os.path.dirname(path), "script.js")
+    if os.path.exists(script):
+        lm = re.search(r"const LANGUAGES = \{(.*?)\};", open(script, encoding="utf-8").read(), re.S)
+        langs = re.findall(r"(\w+):\s*\"", lm.group(1)) if lm else []
+
     # contents: nur bei Sammelbänden, Liste von mindestens zwei nicht leeren Werktiteln
     starts = [m.start() for m in re.finditer(r'\bid:\s*\d+,', text)] + [len(text)]
     for k, b in enumerate(books):
-        cm = re.search(r'\bcontents:\s*\[(.*?)\]', text[starts[k]:starts[k + 1]], re.S)
+        block = text[starts[k]:starts[k + 1]]
+        lg = re.search(r'\blanguage:\s*"([^"]*)"', block)
+        if not lg or not lg.group(1):
+            problems.append("id %d: language fehlt" % b["id"])
+        elif langs and lg.group(1) not in langs:
+            problems.append("id %d: Sprache «%s» fehlt in LANGUAGES (script.js)" % (b["id"], lg.group(1)))
+        vol = re.search(r'\bvolume:\s*([^,\n]*)', block)
+        if vol and not re.fullmatch(r"\d+", vol.group(1).strip()):
+            problems.append("id %d: volume muss eine ganze Zahl sein" % b["id"])
+        if vol and not re.search(r'\bseries:\s*"[^"]+"', block):
+            problems.append("id %d: volume ohne series" % b["id"])
+        cm = re.search(r'\bcontents:\s*\[(.*?)\]', block, re.S)
         b["contents"] = re.findall(r'"([^"]*)"', cm.group(1)) if cm else []
         if cm and (len(b["contents"]) < 2 or not all(w.strip() for w in b["contents"])):
             problems.append("id %d: contents braucht mindestens zwei nicht leere Werke" % b["id"])
